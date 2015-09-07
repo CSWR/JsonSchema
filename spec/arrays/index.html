@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../favicon.ico">
+        
+
+	<title>Arrays - JSON Schema</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">JSON Schema</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Home</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Building Schemas <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../introduction/">Introduction</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../basic_types/">Basic Types</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Arrays</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../objects/">Objects</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../generic_keywords/">Generic Keywords</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../multiple_types/">Multiple Types</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../definitions_references/">Definitions & References</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Formal Specification <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../grammar/">Grammar</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../semantics/">Semantics</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li >
+                    <a rel="next" href="../basic_types/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../objects/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#arrays">Arrays</a></li>
+        
+            <li><a href="#array-schemas">Array Schemas</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="arrays"><CENTER>Arrays</CENTER></h1>
+<p><center>Here we show how to specify collections of JSON types using possibly nested JSON Schemas.</center></p>
+<h2 id="array-schemas">Array Schemas</h2>
+<p>Arrays are used to represent ordered sets of values, such as the following sequence of strings:</p>
+<pre><code>["Chilean", "Argentinean", "Peruvian", "Colombian"]</code></pre>
+
+<p>In this section we specify array's main charasteristics and restrictions that may apply to them using a single JSON Schema document.</p>
+<p>First of all, we want to ensure that the document we are validating is an array using the type restriction. This is the basic array schema:</p>
+<pre><code>{
+ "type": "array"
+}</code></pre>
+
+<p>This schema specifyies arrays and no other JSON documents. For example the following document does not validate against the schema:</p>
+<pre><code>{
+ "nation1": "chilean", 
+ "nation2": "argentinean",
+ "this": "is",
+ "not": "an",
+ "keyword": "array"
+ }</code></pre>
+
+<p>On the other hand, the following JSON does validate against the schema above: </p>
+<pre><code>["Chilean", "Argentinean", "this", "is", "an", "array"]</code></pre>
+
+<h3 id="restrictions">Restrictions</h3>
+<p>We can restrict the contents of an array using a JSON Schema. For example, if we want to be sure that the items of the array are strings and that we could have at most <code>3</code> items we could use the following schema:</p>
+<pre><code>{
+ "type": "array",
+ "maxItems": 3,
+ "items": {
+           "type": "string"
+          }
+}</code></pre>
+
+<p>The following JSON document would validate again the schema:</p>
+<pre><code>["Chilean", "Argentinean"]</code></pre>
+
+<p>This one would not validate since it has more than 3 elements:</p>
+<pre><code>["Chilean", "Argentinean", "Peruvian", "Colombian"]</code></pre>
+
+<p>A JSON Schema for an array can be seen as set of restrictions that must apply on the elements of the array. In the next sections we specificate each restriction and when a JSON document validates against these restrictions.</p>
+<h4 id="item-restriction">Item Restriction</h4>
+<p>We use these restrictions to restrict the elements of the array. We have two ways of doing this. </p>
+<p>The first is to enforce that all the elements of an array must validate against a given schema, as in the following example:</p>
+<pre><code>{
+ "type": "array",
+ "items":{
+          "type": "integer"
+         }
+}</code></pre>
+
+<p>In this case, we are asking that every element of the array must be an integer. For example, this array validates against the schema</p>
+<pre><code>[3, 1, 4, 5]</code></pre>
+
+<p>But this one does not</p>
+<pre><code>[3, "one", 4, 5]</code></pre>
+
+<p>The second way of restricting the elements is to specify a JSON Schema for each element in the array. The following schema is an example of the second use of the items restriction: </p>
+<pre><code>{
+ "type": "array",
+ "items" : [{
+          "type": "string"
+         },
+         {
+          "type": "integer"
+         },
+         {
+          "type": "boolean"
+         }
+         ]
+}</code></pre>
+
+<p>In this case, we are asking that the first element must be a string, the second one an integer and the third one a boolean. For example, this array validates against the schema</p>
+<pre><code>["Chile", 1, true ]</code></pre>
+
+<p>But this one does not</p>
+<pre><code>["Chile", "one", 4]</code></pre>
+
+<p>Note that the default behaviour of JSON Schema allows us to have fewer items, as long as the corresponding (sub)schemas are satisfied. For instance, the array </p>
+<pre><code>["Chile", 4]</code></pre>
+
+<p>does validate against the schema above. The same is true if we have more items. Namely, the following array is valid against the schema above:</p>
+<pre><code>["Chile", 4, true, "Argentina", "Brazil"]</code></pre>
+
+<h4 id="additional-items">Additional Items</h4>
+<p>This restriction specifies if the array can contain items which are not specified in the schema. Here we have an example of this kind of restriction</p>
+<pre><code>{
+ "type": "array",
+ "items" : [{
+          "type": "string"
+         },
+         {
+          "type": "integer"
+         },
+         {
+          "type": "boolean"
+         }
+         ],
+ "additionalItems": false       
+}</code></pre>
+
+<p>In this example, we are asking that the first element must be a string, the second one an integer and the third one a boolean. But we cannot have any more items than these three. Here have JSON document that validates against this schema</p>
+<pre><code>["Chile", 1, true]</code></pre>
+
+<p>But this one does not validate, because there is an additional item. </p>
+<pre><code>["Chile", 1, true, 2]</code></pre>
+
+<p>As illustrated above, by default JSON Schema behaves as if the <code>additionalItems</code> parameter is set to <code>true</code>.</p>
+<h4 id="item-quantity">Item Quantity</h4>
+<p>We can also specify the amount of items in an array. We use <code>"minItems": n</code> to specify that the array must have at least <code>n</code> elements, and <code>"maxItems":  n</code> to specify that the array cannot have more than <code>n</code> elements. Here we have an example of this restriction</p>
+<pre><code>{
+ "type": "array",
+ "minItems": 2,
+ "maxItems": 5
+}</code></pre>
+
+<p>As we can see, we are specifying arrays with at least <code>2</code> elements and no more than <code>5</code>. For example this document validates against the schema</p>
+<pre><code>["Chile", 16.000.000, "San Francisco", 800.000]</code></pre>
+
+<p>But this one does not</p>
+<pre><code>["Chile", 16.000.000, "San Francisco", 800.000, "London", 9.000.000]</code></pre>
+
+<h4 id="uniqueness">Uniqueness</h4>
+<p>We use this restriction if we want all elements of an array to be different. The following schema specifies an array in which all documents are different:</p>
+<pre><code>{
+ "type": "array",
+ "uniqueItems": true
+}</code></pre>
+
+<p>For example this document validates against the schema</p>
+<pre><code>[1, 3, 5, 7]</code></pre>
+
+<p>But this one does not, </p>
+<pre><code>[1, 3, 5, 3]</code></pre>
+
+<h3 id="formal-specification">Formal Specification</h3>
+<p>The correct grammar for these schemas is as follows:
+<pre>
+ <b>arrSch</b>:= "type": "array" (, <b>arrRes</b>)<sup>*</sup>
+</pre></p>
+<p>Here <strong>arrRes</strong> is a restriction for the type array such that every <strong>arrRes</strong> must be different from each other and occurs no more than one time each. Each of these restrictions is defined as follows:</p>
+<pre>
+ <b>arrRes</b> := <b>items</b> | <b>additems</b> | <b>minitems</b> | <b>maxitems</b> | <b>unique</b>
+ <b>items</b> := ( <b>sameitems</b> |  <b>varitems</b> )
+ <b>sameitems</b> := "items": { <b>JSch</b> }
+ <b>varitems</b> := "items": [{ <b>JSch</b> }(,{ <b>JSch</b> })<sup>*</sup>] (, "additionalItems": false)?
+ <b>minitems</b> := "minItems": n
+ <b>maxitems</b> := "maxItems": n
+ <b>unique</b> := "uniqueItems": (true | false)
+</pre>
+
+<p>Here <strong>n</strong> is a natural number and <b>JSch</b> a JSON Schema. Note that we do not include <code>"additionalItems": true</code> in <strong>varitems</strong>, since it is the default. </p>
+<h3 id="formal-validation">Formal Validation</h3>
+<p>Let <b>A</b> be an Array Schema and <b>J</b> a JSON document. We say that <b>J</b> validates against <b>A</b> if for each key:value pair <b>k</b> in <b>A</b> one of the following holds:</p>
+<ul>
+<li><b>k</b> is <code>"type": "array"</code> and <b>J</b> is an array</li>
+<li><b>k</b> is <code>"items": s</code> and <b>J</b> is an array such that every element validates against <strong>s</strong></li>
+<li><b>k</b> is <code>"items": [s<sub>1</sub> , ... , s<sub>n</sub>]</code> and <b>J</b> is an array <code>[a<sub>1</sub> , ... , a<sub>m</sub>]</code> such that every element <strong>a<sub>i</sub></strong> validates against <strong>s<sub>i</sub></strong> with <strong>i</strong> ≤ Min(<strong>m</strong>,<strong>n</strong>).</li>
+<li><b>k</b> is <code>"additionalItems": false</code>, there is a key:value pair <code>"items": [s<sub>1</sub> , ... , s<sub>n</sub>]</code> in <strong>A</strong> and <strong>J</strong> is an array with at most n elements. </li>
+<li><b>k</b> is <code>"minItems": n</code> and <b>J</b> is an array with at least n elements</li>
+<li><b>k</b> is <code>"maxItems": n</code> and <b>J</b> is an array with at most n elements</li>
+<li><b>k</b> is <code>"uniqueItems": true</code> and <b>J</b> is an array with all elements different from each other</li>
+</ul></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

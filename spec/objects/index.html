@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../favicon.ico">
+        
+
+	<title>Objects - JSON Schema</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">JSON Schema</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Home</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Building Schemas <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../introduction/">Introduction</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../basic_types/">Basic Types</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../arrays/">Arrays</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Objects</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../generic_keywords/">Generic Keywords</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../multiple_types/">Multiple Types</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../definitions_references/">Definitions & References</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Formal Specification <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../grammar/">Grammar</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../semantics/">Semantics</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li >
+                    <a rel="next" href="../arrays/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../generic_keywords/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#objects">Objects</a></li>
+        
+            <li><a href="#object-schemas">Object Schemas</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="objects"><CENTER>Objects</CENTER></h1>
+<p><center>Here we show how to specify collections of key:value pairs using possibly nested JSON Schemas.</center></p>
+<h2 id="object-schemas">Object Schemas</h2>
+<p>Objects in JSON are collections of key:value pairs, where the values in these pairs can be again any JSON Document. JSON schemas that specify objects are called <em>Object Schemas</em>. The document</p>
+<pre><code>{"type": "object"}</code></pre>
+
+<p>is an Object Schema. It specifies any JSON document that is an object, such as </p>
+<pre><code>{
+  "first_name": "Gary", 
+  "last_name": "Medel"
+}</code></pre>
+
+<p>or </p>
+<pre><code>{
+  "name": {"first_name": "Gary", "last_name": "Medel"}, 
+  "age": 27
+}</code></pre>
+
+<p>but not, for instance</p>
+<pre><code>["this","is","an","array"]</code></pre>
+
+<h3 id="restrictions">Restrictions</h3>
+<p>JSON Schema contains several keywords allowing us to define more specific types of objects. For example, if we want to specify documents that include <code>first_name</code>, <code>last_name</code> and <code>age</code>, we can use</p>
+<pre><code>{
+    "type": "object",
+    "required": ["first_name", "last_name", "age"]
+}</code></pre>
+
+<p>Object types that validate against this schema must have at least pairs with keys <code>first_name</code>, <code>last_name</code> and <code>age</code>. </p>
+<p>However, we have not stated any restrictions for the values of these pairs. This means that the following document also validates against the previous schema: </p>
+<pre><code>{
+    "first_name": 4,
+    "last_name": true,
+    "age": "whatever"
+}</code></pre>
+
+<p>Not very informative, right? Ideally we would like the values of <code>first_name</code> and <code>last_name</code> to be strings and <code>age</code> to be an integer. We can achieve this as follows: </p>
+<pre><code>{
+    "type": "object",
+    "required": ["first_name", "last_name", "age"],
+    "properties": {
+        "first_name": {"type": "string"},
+        "last_name": {"type": "string"},
+        "age": {"type": "integer"}
+    }
+}</code></pre>
+
+<p>This time, the only documents that validate against the schema are those that looke like the following one:</p>
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+    "age": 27
+}</code></pre>
+
+<p>Next we review all restrictions avaliable for Object Schemas. </p>
+<h4 id="required">Required</h4>
+<p>As we have mentioned, we use <code>"required"</code> to specify a list of strings that need to be present as key names in the list of <code>key:value</code> pairs that appear in a JSON document. In general, a schema of the form </p>
+<pre><code>{
+    "type": "object",
+    "required": ["a", "b", "c", "d"]
+}</code></pre>
+
+<p>Specifies documents that need to have pairs with key names <code>"a"</code>, <code>"b"</code>, <code>"c"</code> and <code>"d"</code>. </p>
+<h4 id="properties">Properties</h4>
+<p>The <code>property</code> keyword is used to specify the key:value pairs of JSON documents. The value of <code>property</code> is itself a key:value pair, while the value can be any JSON schema and it is used to specify how the value of the key:value pair should look. For example, the following schema specifies that objects should have at least two pairs, with keys <code>first_name</code> and <code>last_name</code>, and the values of those must be strings. </p>
+<pre><code>{
+    "type": "object",
+    "required": ["first_name", "last_name"],
+    "properties": {
+        "first_name": {"type": "string"},
+        "last_name": {"type": "string"}
+    }
+}</code></pre>
+
+<p>Now let's say that we want to specify football players. They should have a <code>name</code>, <code>age</code> and a <code>club_name</code>. Furthermore,   the <code>name</code> should consist of a <code>first_name</code> and a <code>last_name</code>. We achieve this using the following schema: </p>
+<p><pre><code>{
+    "type": "object",
+    "required": ["name", "age","club_name"],
+    "properties": {
+           "name": {
+               "type": "object",
+               "required": ["first_name", "last_name"],
+               "properties": {
+                       "first_name": {"type": "string"},
+                       "last_name": {"type": "string"}
+               }
+           },
+           "age": {"type": "integer"}, 
+           "club_name": {"type": "string"}
+    }
+}</code></pre></p>
+<p>Note that the schema under <code>"name"</code> is again an Object Schema. We can do this as many times as we want! The following document validates against the schema above</p>
+<pre><code>
+{
+   "name": {
+      "first_name": "Gary",
+      "last_name": "Medel"
+   },
+   "age": 27,
+   "club_name": "Inter Milan"
+}</code></pre>
+
+<p>By default the names specified under <code>"properties"</code> are not required, this means that, for example, the empty document </p>
+<pre><code>{}</code></pre>
+
+<p>validates against the schema </p>
+<pre><code>{
+    "type": "object",
+    "properties": {
+        "first_name": {"type": "string"},
+        "last_name": {"type": "string"}
+    }
+}</code></pre>
+
+<p>For validation purproses the <code>"properties"</code> keyword should be understood as follows: if a document contains a key:value pair <em>and</em> the key of the pair is specified in <code>"properties"</code>, then the value of the pair needs to validate against the schema specified under the key in <code>"properties"</code>. </p>
+<h4 id="additional-properties">Additional Properties</h4>
+<p>The restriction <code>"properties"</code> does not state aything about the structure of any additional names not specified using this keyword. The <code>"additionalProperties"</code> keyword is used both to state if the document will support additional properties from the ones named in <code>"properties"</code> restriction and to give a schema for these extra properties. For example, let us analyze the following schema </p>
+<pre><code>{
+    "type": "object",
+    "properties": {
+        "first_name": {"type": "string"},
+        "last_name": {"type": "string"}
+    },
+    "additionalProperties": false
+}</code></pre>
+
+<p>In this case we are asking for documents that do not have any properties whose keywords are different from <code>"first_name"</code> and <code>"last_name"</code>. For instance, this document would not validate:</p>
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+    "age": 25
+}</code></pre>
+
+<p>The other use of <code>"additionalProperties"</code> is to restrict the structure of the additional properties of the object. For example, consider the following schema </p>
+<pre><code>{
+    "type": "object",
+    "properties": {
+        "first_name": {"type": "string"},
+        "last_name": {"type": "string"}
+    },
+    "additionalProperties": {
+                             "type": "integer"
+                            }
+}</code></pre>
+
+<p>Here we are asking that any keywords different from <code>"first_name"</code> and <code>"last_name"</code> must have integer values. For example the next JSON document validates against the schema</p>
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+    "age": 25
+}</code></pre>
+
+<p>But this one does not</p>
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+    "age": "twenty five"
+}</code></pre>
+
+<h4 id="number-of-properties">Number of Properties</h4>
+<p>The <code>"minProperties"</code>and <code>"maxProperties"</code> keywords are used to restrict the number of properties allowed in a JSON object. For example, let us consider the following schema </p>
+<pre><code>{
+    "type": "object",
+    "minProperties": 3,
+    "maxProperties": 5
+}</code></pre>
+
+<p>Here we are asking for JSON objects with at least <code>3</code> properties and no more than <code>5</code>. For example this object validates against the previous schema</p>
+<pre><code>{
+    "first": 10,
+    "second": 11,
+    "third": 12,
+    "four": 13
+}</code></pre>
+
+<p>but this one does not</p>
+<pre><code>{
+    "first": 10,
+    "second": 11
+}</code></pre>
+
+<h4 id="dependencies">Dependencies</h4>
+<p>Dependecies are used to modify the schema as a function of the key:value pairs that are present in the JSON document. There are two ways of doing this with the<code>"dependencies"</code> keyword. </p>
+<p>The first way is to force the presence of some properties whenever a particular key is present in the document. Let us consider the following example</p>
+<pre><code>{
+    "type": "object",
+    "properties": {
+        "first_name": {"type": "string"},
+        "last_name": {"type": "string"},
+        "team": {"type": "string"},
+        "league": {"type": "string"}
+            },
+    "required": ["first_name", "last_name"],
+    "dependencies": {
+                        "team": ["league"]    
+                      }
+}</code></pre>
+
+<p>Here we validate all documents that contain the keys <code>"first_name"</code> and <code>"last_name"</code>, but if the object has the key <code>"team"</code> then the key <code>"league"</code> becomes a required property. For example, this document is valid against the schema</p>
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+    "team": "Inter Milan",
+    "league": "Serie A"
+}</code></pre>
+
+<p>but this one is not valid</p>
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+    "team": "Inter Milan"
+}</code></pre>
+
+<p>The other way of using the <code>"dependencies"</code> keyword is to specify that the JSON object must also satisfy another JSON Schema whenever certain keys are present. Let us consider the following schema as an example</p>
+<pre><code>{
+    "type": "object",
+    "properties": {
+        "first_name": {"type": "string"},
+        "last_name":  {"type": "string"},
+        "team":  {"type": "string"}
+                     },
+    "required": ["first_name", "last_name"],
+    "dependencies":{
+                        "team": {
+                        "type": "object",
+                        "properties": {
+                            "league": {"type": "string"},
+                            "goals": {"type": "integer"}
+                                         },
+                       "required": ["league", "goals"]
+                        }  
+                      }
+}</code></pre>
+
+<p>Now JSON objects that do have the key <code>"team"</code> must also validate against the schema </p>
+<pre><code>
+{
+    "type": "object",
+    "properties": {
+        "league": {"type": "string"},
+        "goals": {"type": "integer"}
+        },
+    "required": ["league", "goals"]
+}</code></pre>
+
+<p>and thus must also have the keys <code>"league"</code> and <code>"goals"</code>. Note that this is <em>not</em> a restriction on the value of the key <code>team</code>, but on the document itself. For example the next two objects validate against the complete schema</p>
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+}</code></pre>
+
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+    "team": "Inter Milan",
+    "league": "Serie A",
+    "goals": 5
+}</code></pre>
+
+<p>But this one does not</p>
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+    "team": "Inter Milan",
+    "goals": 5
+}</code></pre>
+
+<p>Nor does</p>
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+    "team": {
+            "league": "Serie A",
+            "goals": 5
+             }
+}</code></pre>
+
+<h4 id="pattern-properties">Pattern Properties</h4>
+<p>Sometimes we want to restrict a set of properties depending if they share a pattern on their keys. The <code>"patternProperties"</code> keyword is used to restrict keywords matching a certain regular expression. Let us see an example of this</p>
+<pre><code>{
+    "type": "object",
+    "properties": {
+        "first_name": {"type": "string"},
+        "last_name": {"type": "string"},
+        "team": {"type": "string"},
+        "league": {"type": "string"}
+            },
+   "patternProperties": {
+       "_goals$": { "type": "integer" }
+  }
+}</code></pre>
+
+<p>Here we are asking that keys matching the regular expression  <code>_goals$</code> must be integers. For example the following JSON object validates against the schema</p>
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+    "team": "Inter de Milan",
+    "league": "Serie A",
+    "league_goals": 5,
+    "international_goals": 2
+}</code></pre>
+
+<p>but this one does not</p>
+<pre><code>{
+    "first_name": "Gary",
+    "last_name": "Medel",
+    "team": "Inter Milan",
+    "league": "Serie A",
+    "league_goals": "five"
+}</code></pre>
+
+<h3 id="formal-specification">Formal Specification</h3>
+<p>The correct grammar for these schemmas can be seen like this:</p>
+<pre>
+ <b>objSch</b>:= "type": "object" (, <b>objRes</b>)<sup>*</sup>
+</pre>
+
+<p>Here <strong>objRes</strong> is a restriction for objects such that every <strong>objRes</strong> occurence in the schema is unique. Each of these restrictions is defined as follows:</p>
+<pre> <b>objRes</b> :=  <b>prop</b> | <b>addprop</b> | <b>req</b> | <b>minprop</b> | <b>maxprop</b> | <b>dep</b> | <b>pattprop</b>
+ <b>prop</b> := "properties: "{ <b>kSch</b> (, <b>kSch</b>)<sup>*</sup>}
+ <b>addprop</b> := "additionalProperties": (true | false | { <b>JSch</b> })
+ <b>req</b> := "required": [ <b>kword</b> (, <b>kword</b>)<sup>*</sup>]
+ <b>minprop</b> := "minProperties: " n
+ <b>maxprop</b> := "maxProperties: " n
+ <b>dep</b> := "dependencies: "(<b>depArr</b> | <b>depSch</b>)
+ <b>depArr</b> := { <b>kArr</b> (, <b>kArr</b>)<sup>*</sup>}
+ <b>depSch</b> := { <b>kSch</b> (, <b>kSch</b>)<sup>*</sup>}
+ <b>kArr</b> := <b>kword</b>: [ <b>kword</b> (, <b>kword</b>)<sup>*</sup>]
+<b> kSch </b> := <b>kword</b>: {<b>JSch</b>}
+ <b>pattprop</b> := "patternProperties: "{ <b>patSch</b> (, <b>patSch</b>)<sup>*</sup>}
+ <b>patSch</b> := regexp: { <b>JSch</b> } </pre>
+
+<p>Here <strong>n</strong> is a natural number, <b>kword</b> is a JSON string and <b>JSch</b> a JSON Schema. </p>
+<h3 id="formal-validation">Formal Validation</h3>
+<p>Let <b>O</b> be an object Schema and <b>J</b> a JSON document. We say that a keyword <strong>k</strong> appears in <strong>J</strong> is <strong>J</strong> contains a key:value pair of the form <strong>k: j'</strong>, for some document <strong>j'</strong>. Moreover, we use <strong>properties(O)</strong> to denote all keywords <code>k<sub>1</sub>, ..., k<sub>n</sub></code> that appear in the key-value pair of the form <code>"properties": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code> in <strong>O</strong>. The set <strong>properties(O)</strong> is empty if the keyword properties does not appear in <strong>O</strong>. Likewise, we use <strong>patternProperties(O)</strong> to denote all keywords <code>k<sub>1</sub>, ..., k<sub>n</sub></code> that appear in the key-value pair of the form  <code>"additionalProperties": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code> in <strong>O</strong>. The set <strong> patternProperties(O)</strong> is empty if the keyword <code>patternProperties</code> does not appear in <strong>O</strong>.</p>
+<p>We say that <b>J</b> validates against <b>O</b> if for each key:value pair <b>k</b> in <b>O</b> one of the following holds:</p>
+<ul>
+<li><strong>k</strong> is of the form <code>"type": "object"</code> and <b>J</b> is an object</li>
+<li><strong>k</strong> is of the form <code>"properties": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code> and <b>J</b> is an object that for each key-value pair <b>k': j'</b> in <b>J</b>, if <b>k' = k<sub>i</sub></b> for some <strong>i</strong> in [ <strong>1</strong> , ... , <strong>n</strong> ] then <b>j'</b> satisfies <b>s<sub>i</sub></b></b></li>
+<li><strong>k</strong> is of the form <code>"additionalProperties": false</code> and <b>J</b> is an object such that every keyword in <b>J</b> either belongs to <strong>properties(O)</strong> or matches at least one of the expressions in <strong>patternProperties(O)</strong></li>
+<li><strong>k</strong> is of the form <code>"additionalProperties": true</code> and <b>J</b> is an object</li>
+<li><strong>k</strong> is of the form <code>"additionalProperties": s</code> and <b>J</b> is an object such that for each key-value pair <b>k': j'</b> in <b>J</b>, with <b>k'</b> not in <strong>properties(O)</strong> and <strong>k'</strong> not matching any of the expressions in <strong>patternProperties(O)</strong>, we have that <b>j'</b> validates against <b>s</b></li>
+<li><strong>k</strong> is of the form <code>"required": [k<sub>1</sub> , ... , k<sub>n</sub>]</code> and each <b>k<sub>i</sub></b></b> appears in <strong>J</strong>. </li>
+<li><strong>k</strong> is of the form <code>"minProperties": n</code> and <b>J</b> is an object with at least <strong>n</strong> key:value pairs</li>
+<li><strong>k</strong> is of the form <code>"maxProperties": n</code> and <b>J</b> is an object with at most <strong>n</strong> key:value pairs</li>
+<li><strong>k</strong> is of the form <code>"dependencies": {k<sub>1</sub>: [l<sub>1,1</sub> , ... ,l<sub>1,m<sub>1</sub></sub>], ... , k<sub>n</sub>: [l<sub>n,1</sub> , ... ,l<sub>n,m<sub>n</sub></sub>]}</code> and <b>J</b> is an object such that if <strong>k<sub>i</sub></strong> appears in <b>J</b> then every keyword in <strong>[l<sub>i,1</sub> , ... ,l<sub>i,m<sub>i</sub></sub>]</strong> appears in <b>J</b></li>
+<li><strong>k</strong> is of the form <code>"dependencies": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code>  and <b>J</b> is an object such that if <b>k<sub>i</sub></b> appears in <b>J</b> then <b>J</b> must satisfy <b>s<sub>i</sub></b></li>
+<li><strong>k</strong> is of the form <code>"patternProperties": {regexp<sub>1</sub>: s<sub>1</sub> , ... , regexp<sub>n</sub>: s<sub>n</sub>}</code> and <b>J</b> is an object such that for each key-value pair <b>k': j'</b> in <b>J</b>, if <b>k'</b> is in the language of  regexp<sub>i</sub> for some i in [ <strong>1</strong> , ... , <strong>n</strong> ] then <b>j'</b> satisfies <b>s<sub>i</sub></b></b></li>
+</ul></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

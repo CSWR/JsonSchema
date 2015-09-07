@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../favicon.ico">
+        
+
+	<title>Multiple Types - JSON Schema</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">JSON Schema</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Home</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Building Schemas <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../introduction/">Introduction</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../basic_types/">Basic Types</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../arrays/">Arrays</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../objects/">Objects</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../generic_keywords/">Generic Keywords</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Multiple Types</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../definitions_references/">Definitions & References</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Formal Specification <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../grammar/">Grammar</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../semantics/">Semantics</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li >
+                    <a rel="next" href="../generic_keywords/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../definitions_references/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#multiple-types">Multiple Types</a></li>
+        
+            <li><a href="#how-restrictions-work-under-multiple-types">How restrictions work under multiple types</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="multiple-types"><CENTER>Multiple Types</CENTER></h1>
+<p>So far we have only described how to specify types uniquely. But we could also specify that a certain document may be any number of types, such as string or integer, object or array, etc.</p>
+<p>The basic declaration of multiple types is through the <code>"type"</code> keyword, where we can now have an array containing different types. For example, the following schema specifies integers and strings: </p>
+<pre><code>{
+    "type": ["integer", "string"]
+}</code></pre>
+
+<p>In addition, we also have the empty schema, that specifies all possible types of JSON documents </p>
+<pre><code>{}</code></pre>
+
+<h2 id="how-restrictions-work-under-multiple-types">How restrictions work under multiple types</h2>
+<p>The Keyword restrictions work a little different when multiple (or no) types are defined. Recall how, in the schema: </p>
+<pre><code>{
+    "type": "string",
+    "minLength": 4
+}</code></pre>
+
+<p>the keyword <code>"minLength": 4</code> imposes the restriction that all documents specified by this schema must have length at least 4 (all documents specified are strings). Likewise, in the schema</p>
+<pre><code>{
+    "type": "integer",
+    "minimum": 2
+}</code></pre>
+
+<p>the keyword <code>"minimum": 2</code> imposes the restriction that all documents specified by it must be greater than or equal to 2 (all documents specified by the schema are integers).</p>
+<p>In schemas that specify either integer or strings these restrictions work in a slightly different way. Restrictions are only checked when the document is of a type that is compatible with the keyword.</p>
+<p>Consider for example the schema:</p>
+<pre><code>{
+    "type": ["integer","string"],
+    "minimum": 2,
+    "minLength": 4
+}</code></pre>
+
+<p>This schema specifies both integers that are greater than or equal than <code>2</code> and strings that are of length at least <code>4</code>. In other words, the schema above is equivalent to: </p>
+<pre><code>{
+    "anyOf": [
+        {
+            "type": "integer",
+            "minimum": 2
+        }, 
+        {
+            "type": "string",
+            "minLength": 4
+        }
+    ]
+}</code></pre>
+
+<p>In general, when multiple (or no) types are defined in the schema, the rule for restrictions is as follows: each keyword restriction only applies when validating documents that are of the type that is compatible with the keyword. </p>
+<p>As another example, the following schema specifies JSON documents that are either arrays, strings, integers, numbers, boolean or nulls, and also objects that have the property <code>"I_apply_only_to_objects"</code>: </p>
+<pre><code>{
+    "required": ["I_apply_only_to_objects"]
+}</code></pre>
+
+<p>This is again equivalent to </p>
+<pre><code>{
+    "anyOf": [
+        {
+        "not": {
+        "type": "object"
+        }
+         }, 
+        {
+            "type": "object",
+            "required": ["I_apply_only_to_objects"] 
+        }
+    ]
+}</code></pre>
+
+<p>A list of all keywords and the types compatible are given below:</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>compatible keywords</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td>"type", "minLength", "maxLength",  "pattern".</td>
+</tr>
+<tr>
+<td>number</td>
+<td>"type", "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf".</td>
+</tr>
+<tr>
+<td>integer</td>
+<td>"type", "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf".</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>"type".</td>
+</tr>
+<tr>
+<td>null</td>
+<td>"type".</td>
+</tr>
+<tr>
+<td>array</td>
+<td>"type", "minItems", "maxItems", "items", "uniqueItems".</td>
+</tr>
+<tr>
+<td>object</td>
+<td>"type", "properties", "additionalProperties", "required", "minProperties", "maxProperties", "dependencies", "patternProperties", "regexp".</td>
+</tr>
+</tbody>
+</table>
+<h3 id="formal-specification">Formal Specification</h3>
+<p>Multiple types are created according to the following grammar (most of the tokens here were defined in previous sections) </p>
+<pre>
+<b>multSch</b> :=   <b>multRes</b> (, <b>multRes</b>)*
+<b>multRes</b> := <b>type</b> | <b>strRes</b> | <b>numRes</b> | <b>arrRes</b> | <b>objRes</b>
+<b>type</b> := "type" : [<b>typename</b> (, <b>typename</b>)*]
+<b>typename</b> := "string" | "integer" | "number" | "boolean" | "null" | "array" | "object"
+</pre>
+
+<p>Where as usual each of the words replaced for the  <strong>multRes</strong> tokens is unique. </p>
+<h3 id="formal-validation">Formal Validation</h3>
+<p>We define the function <strong>Compatible(J,k)</strong> that takes a JSON document <strong>J</strong> and a key/value pair <strong>k</strong> of the form <code>key: value</code> and returns <strong>true</strong> if <code>key</code> is a string in the following list:</p>
+<table>
+<thead>
+<tr>
+<th>list of keywords</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"type", "minLength", "maxLength",  "pattern", "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf", "minItems", "maxItems", "items", "uniqueItems", "properties", "additionalProperties", "required", "minProperties", "maxProperties", "dependencies", "patternProperties", "regexp".</td>
+</tr>
+</tbody>
+</table>
+<p>and <code>key</code> is compatible to the type of <strong>J</strong> according to the compatibility table above. Otherwise, <strong>Compatible(J,k)</strong> returns <strong>false</strong>. </p>
+<p>Let <strong>M</strong> be a multiple type Schema and <strong>J</strong> a JSON document. We say that <strong>J</strong> validates against <strong>M</strong> if one of the following holds:</p>
+<ul>
+<li>
+<p>for each name/value pair <strong>k</strong> in <strong>M</strong> we have that <strong>Compatible(J,k) = false</strong>  </p>
+</li>
+<li>
+<p>for each name/value pair <strong>k</strong> in <strong>M</strong> such that <strong>Compatible(J,k) = true</strong> we have that <strong>J</strong> validates against <strong>k</strong>. Here we must note that the semantics of <strong>k</strong> is mentioned in each type section</p>
+</li>
+<li>
+<p><strong>M</strong> has the name/value pair <code>"type: [t<sub>1</sub> ... t<sub>n</sub>]"</code> and for some <strong>t<sub>i</sub></strong>, <strong>J</strong> is of type <strong>t<sub>i</sub></strong></p>
+</li>
+</ul>
+<h3 id="conclusions">Conclusions</h3>
+<p>Finally we must mention that the use of the <code>type</code> keyword is a highly recommended practice by the community. As we learnt in this section the multiple type instances can be easily simulated using boolean combinations of schemas and do not seem to expand the expressive power of JSON Schemas.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

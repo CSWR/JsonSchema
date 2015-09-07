@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../favicon.ico">
+        
+
+	<title>Basic Types - JSON Schema</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">JSON Schema</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Home</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Building Schemas <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../introduction/">Introduction</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Basic Types</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../arrays/">Arrays</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../objects/">Objects</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../generic_keywords/">Generic Keywords</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../multiple_types/">Multiple Types</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../definitions_references/">Definitions & References</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Formal Specification <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../grammar/">Grammar</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../semantics/">Semantics</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li >
+                    <a rel="next" href="../introduction/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../arrays/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#basic-types">Basic Types</a></li>
+        
+            <li><a href="#string-schemas">String Schemas</a></li>
+        
+            <li><a href="#numeric-schemas">Numeric Schemas</a></li>
+        
+            <li><a href="#boolean-schemas">Boolean Schemas</a></li>
+        
+            <li><a href="#null-schemas">Null Schemas</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="basic-types"><CENTER>Basic Types</CENTER></h1>
+<p>JSON Documents can be either basic values (strings, numbers, integers, the boolean constants or null), or ordered or unordered list of key:value pairs. We can use JSON Schema to specify that documents can be any of these. For now we concentrate on the specification for values. There are five basic value types supported by JSON Schema: </p>
+<ul>
+<li><a href="#string-schemas"><code>string</code></a> </li>
+<li><a href="#numeric-schemas"><code>number</code></a>  </li>
+<li><a href="#numeric-schemas"><code>integer</code></a></li>
+<li><a href="#boolean-schemas"><code>boolean</code></a></li>
+<li><a href="#null-schemas"><code>null</code></a></li>
+</ul>
+<h2 id="string-schemas">String Schemas</h2>
+<p>One of the most basic forms of values that appear in JSON documents are strings of text. In JSON schema we can specify that a document is a string by using the keyword <code>string</code> as the value of the name <code>type</code>. That is, the document</p>
+<pre><code>{"type": "string"}</code></pre>
+
+<p>is a JSON Schema that valiadates against any JSON that is a string. Note that a JSON document is a string only if it is a sequence of Unicode characters enclosed in double quotation marks. That is, <code>"I am a string"</code> is a valid JSON document that satisfies the above schema, but so is the sequence <code>"42"</code>, or <code>"true"</code>. On the other hand <code>42</code> is a JSON document that will <em>not</em> satisfy the above schema, and neither will the document <code>true</code>.   </p>
+<h3 id="restrictions">Restrictions</h3>
+<p>In order to control the length of our string we can use the keywords <code>minLength</code> and <code>maxLength</code>. To restrict the shape of the string even further we can specify that it conforms to a regular expression using the keyword <code>pattern</code>. </p>
+<h4 id="restricting-the-length-of-a-string">Restricting the length of a string</h4>
+<p>We use the <code>"minLength"</code> and <code>"maxLength"</code> keywords to specify that the length of a string has to fall into a particular interval. For instance, the following schema</p>
+<pre><code>{
+  "type": "string", 
+  "minLength": 3,
+  "maxLength": 7
+}</code></pre>
+
+<p>specifies that our JSON document is a string whose minimum length is 3 and whose maximum length is 7. The keywords  <code>"minLength"</code> and <code>"maxLength"</code> always have a non-negative integer as their value. The document <code>"This is"</code> will validate against the above schema, as it is of length seven. On the other hand <code>"Is"</code>, or <code>"This is not valid"</code> will not validate against the schema, as the former is too short, while the latter is too long.</p>
+<h4 id="regular-expressions">Regular expressions</h4>
+<p>To specify that a string conforms to a regular expression we use the keyword <code>"pattern"</code>. For instance, if we want to enforce that the string is a valid email address with the extension <code>gmail.com</code> that contains only letters of the alphabet, we could use the following JSON Schema.</p>
+<pre><code>{
+  "type": "string", 
+  "pattern": "^[A-Za-z]*@gmail.com$"
+}</code></pre>
+
+<p>Here we are specifying that the email address must end with <code>@gmail.com</code>, while the part <code>[A-Za-z]*</code> allows any string consisting of either lowercase or uppercase characters. The symbols <code>^</code> and <code>$</code> are used to signify that the matching of a regular expression is done against the entire string. Therefore, the document <code>"adam@gmail.com"</code> validates against the schema above, but <code>"g42s@gmail.com"</code> does not validate, as the first part before the @ contains a character that is not a letter.</p>
+<p>For a more detailed introduction to regular expressions we refer the reader to check out the <a href="http://www.regexone.com">RegexOne website</a>.</p>
+<h3 id="formal-specification">Formal Specification</h3>
+<p>String Schemas <strong>strSch</strong> are formally specified using the following grammar.</p>
+<pre>
+<b>strSch</b> := "type": "string" (, <b>strRes</b>)<sup>*</sup>
+<b>strRes</b> :=  <b>minLen</b> | <b>maxLen</b> | <b>pattern</b>
+<b>minLen</b> := "minLength": n
+<b>maxLen</b> := "maxLength": n
+<b>pattern</b> := "pattern": r
+</pre>
+
+<p>where each <strong>strRes</strong> token appears at most once in <strong>strSch</strong>, n is an arbitrary non-negative integer and r is a regular expression as specified in <a href="../www.regexone.com">RegexOne website</a>.</p>
+<h3 id="formal-validation">Formal Validation</h3>
+<p>Let <strong>S</strong> be a String Schema and <strong>J</strong> a JSON document. We say that <strong>J</strong> validates against <strong>S</strong> if for each key:value pair <strong>k</strong> in <strong>S</strong> one of the following holds:</p>
+<ul>
+<li><strong>k</strong> is <code>"type": "string"</code> and <strong>J</strong> is a string</li>
+<li><strong>k</strong> is of the form <code>"minLength" : n</code> and <strong>J</strong> is a string of length at least <strong>n</strong></li>
+<li><strong>k</strong> is of the form <code>"maxLength" : n</code> and <strong>J</strong> is a string of length at most <strong>n</strong></li>
+<li><strong>k</strong> is of the form <code>"pattern" : r</code> and <strong>J</strong> is a string that matches the regular expression <strong>r</strong></li>
+</ul>
+<h2 id="numeric-schemas">Numeric Schemas</h2>
+<p>Another form of value in JSON are numbers. In JSON Schema we can specify that a document must be a number by using the <code>type</code> keyword. The document</p>
+<pre><code>{"type": "number"}</code></pre>
+
+<p>is a JSON Schema, that specifies any numeric value. For example, values <code>34</code> and <code>1.82</code> validate against <code>{"type": "number"}</code>, while <code>"34"</code>does not, because it is a string. </p>
+<p>If we need to specify that a value must be an integer, we use instead the keyword <code>integer</code>:</p>
+<pre><code>{"type": "integer"}</code></pre>
+
+<p>Now the value <code>34</code> validates against this schema, but <code>1.82</code> does not. </p>
+<h3 id="restrictions_1">Restrictions</h3>
+<p>We can also specify additional constraints that the numbers must satisfy. All of these keywords can be use by either <code>number</code> or <code>integer</code> types.</p>
+<h4 id="range">Range</h4>
+<p>Suppose we need to specify a value for the age of a person, and we want it to be an integer between 0 and 150. We use the  <code>"minimum"</code> and <code>"maximum"</code> keywords:
+<pre><code>{
+   "type": "integer",
+   "minimum": 0,
+   "maximum": 150
+ }</code></pre></p>
+<p>This document specifies any number between <code>0</code> and <code>150</code>. By default the ranges are inclusive: <code>"minimum": n</code> imposes the restriction that numbers need to be <em>greater than or equal to</em> <code>n</code>, and <code>"maximum": m</code> imposes that numbers need to be <em>less than or equal to</em> <code>m</code>. This means that both <code>0</code> and <code>150</code> satisfy the schema above. We can switch the ranges to be exclusive by using the <code>"exclusiveMinimum"</code> and <code>"exclusiveMaximum"</code> keywords. </p>
+<p>For example, the following schema specifies <code>0</code>, but not <code>150</code>:</p>
+<p><pre><code> {
+   "type": "integer", 
+   "minimum": 0, 
+   "maximum": 150,
+   "exclusiveMaximum": true
+  }</code></pre></p>
+<p>If the <code>"minimum": n</code> keyword is present together with the keyword <code>"exclusiveMinimum": true</code> then the restriction imposes that numbers must be <em>greater</em> than <code>n</code>, and if the <code>"maximum": m</code> keyword is present together with <code>"exclusiveMaximum": true</code> then the restriction is that the number must be <em>lower than</em> <code>m</code>. </p>
+<h4 id="multiplicity">Multiplicity</h4>
+<p>We can also specify that a number must be the multiple of another number, as in the following schema:</p>
+<p><pre><code> {
+   "type": "integer", 
+   "multipleOf": 10
+  }</code></pre></p>
+<p>This schema specifies any number that is a multiple of <code>10</code>. Note that we can also use real numbers in <code>"multipleOf"</code>, and we can combine it with range restrictions. For example, the numbers <code>3.3</code> and <code>6.6</code> validate against the following schema: </p>
+<p><pre><code> {
+   "type":"integer", 
+   "multipleOf": 3.3,
+   "maximum": 7
+  }</code></pre></p>
+<h3 id="formal-specification_1">Formal Specification</h3>
+<p>Numeric schemas <strong>numSch</strong> are constructed using the following grammar:</p>
+<pre>
+<b>numSch</b> := "type": ("number" | "integer") (, <b>numRes</b>)<sup>*</sup>
+<b>numRes</b> := <b>min</b> | <b>max</b> | <b>multiple</b> 
+<b>min</b> := "minimum": n (, "exclusiveMinimum": bool)?
+<b>max</b> := "maximum": n (, "exclusiveMaximum": bool)?
+<b>multiple</b> := "multipleOf": n
+</pre>
+
+<p>where each <strong>numSch</strong> can have at most one of each <strong>min</strong>, <strong>max</strong> and <strong>multiple</strong>. Here <strong>n</strong> is any number, and <strong>bool</strong> is either <strong>true</strong> or <strong>false</strong>. </p>
+<h3 id="validation">Validation</h3>
+<p>Let <strong>N</strong> be a numeric schema and <strong>J</strong> a JSON document. Then <strong>N</strong> validates against <strong>J</strong> if for each key:value pair <strong>k</strong> in <strong>N</strong>, one of the following holds: </p>
+<ul>
+<li><strong>k</strong> is <code>"type":"number"</code> and <strong>J</strong> is a number, or</li>
+<li><strong>k</strong> is <code>"type":"integer"</code> and <strong>J</strong> is an integer number (a number without the decimal <code>.</code> marker), or</li>
+<li><strong>k</strong> is <code>"multipleOf": n</code>, for some number <strong>n</strong>, and <strong>J</strong> is a number that is a multpiple of <strong>n</strong>, or </li>
+<li><strong>k</strong> is <code>"minimum": n</code>, for some number <strong>n</strong>, and <strong>J</strong> is a number that is greater than or equal to <strong>n</strong>, or</li>
+<li><strong>k</strong> is <code>"maximum": m</code>, for some number <strong>m</strong>, and <strong>J</strong> is a number that is lower than or equal to <strong>m</strong>, or</li>
+<li><strong>k</strong> is <code>"exclusiveMinimum": true</code>, the pair <code>"minimum": n</code> for some number <strong>n</strong> is also in <strong>N</strong>, and <strong>J</strong> is a number that is greater than <strong>n</strong>, or</li>
+<li><strong>k</strong> is <code>"exclusiveMaximum": true</code>, the pair <code>"maximum": m</code> for some number <strong>m</strong> is also in <strong>N</strong>, and <strong>J</strong> is a number that is lower than <strong>m</strong></li>
+</ul>
+<h2 id="boolean-schemas">Boolean Schemas</h2>
+<p>In order to specify a property that can be either true or false we use the value type <code>boolean</code>. A JSON Schema specifying the type <code>boolean</code> is given below.</p>
+<pre><code>{"type": "boolean"}</code></pre>
+
+<p>The only JSON documents that validate against this schema are <code>true</code> and <code>false</code>. Any document of diferent form or of different type, such as <code>"true"</code>, <code>42</code>, or <code>"Number"</code>, will not satsfy the schema. Note that values that usually evaluate to boolean types in programming languages, such as <code>0</code> and <code>1</code> are also not permitted.</p>
+<h3 id="formal-specification_2">Formal Specification</h3>
+<p>A Boolean Schema <strong>boolSch</strong> is formally specified using the following grammar.</p>
+<pre><b>boolSch</b> := "type": "boolean"</pre>
+
+<h3 id="formal-validation_1">Formal Validation</h3>
+<p>Let <strong>B</strong> be a Boolean Schema and <strong>J</strong> a JSON document. We say that <strong>J</strong> validates against <strong>B</strong> if:</p>
+<ul>
+<li><strong>J</strong> is either <strong>true</strong> or <strong>false</strong></li>
+</ul>
+<h2 id="null-schemas">Null Schemas</h2>
+<p>When specifying that a certain value is missing it is usual to use the type <code>null</code>. A JSON Schema specifying null values is given below.</p>
+<pre><code>{"type": "null"}</code></pre>
+
+<p>The only JSON document that validates against this schema is <code>null</code>; all other JSON documents are rejected. Therefore documents such as <code>"false"</code>, <code>false</code> or <code>0</code> will not validate against the schema above.</p>
+<h3 id="formal-specification_3">Formal Specification</h3>
+<p>A Schema <strong>nullSch</strong> for <code>null</code> values is formally specified using the following grammar.</p>
+<pre>
+<b>boolSch</b> := "type": "null"
+</pre>
+
+<h3 id="formal-validation_2">Formal Validation</h3>
+<p>Let <strong>N</strong> be a Schema for <code>null</code> values and <strong>J</strong> a JSON document. We say that <strong>J</strong> validates against <strong>N</strong> if:</p>
+<ul>
+<li><strong>J</strong> equals <strong>null</strong></li>
+</ul></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>

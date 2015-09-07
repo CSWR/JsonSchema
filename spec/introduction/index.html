@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../favicon.ico">
+        
+
+	<title>Introduction - JSON Schema</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">JSON Schema</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Home</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Building Schemas <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li class="active">
+                            <a href="./">Introduction</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../basic_types/">Basic Types</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../arrays/">Arrays</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../objects/">Objects</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../generic_keywords/">Generic Keywords</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../multiple_types/">Multiple Types</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../definitions_references/">Definitions & References</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Formal Specification <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../grammar/">Grammar</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../semantics/">Semantics</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li >
+                    <a rel="next" href="../..">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../basic_types/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#introduction">Introduction</a></li>
+        
+            <li><a href="#json">JSON</a></li>
+        
+            <li><a href="#json-schema">JSON Schema</a></li>
+        
+            <li><a href="#notation">Notation</a></li>
+        
+            <li><a href="#where-to-go-from-here">Where to go from here</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="introduction"><CENTER>Introduction</CENTER></h1>
+<p><CENTER>The basic concepts needed before diving into the world of JSON Schema</CENTER></p>
+<p>Here we present a brief description of some concepts that will make the reading of the specification easier. The <a href="#json">first section</a> explains what a JSON document is, which is essential for understanding the definition of JSON Schemas and how they work. The <a href="#json schema">second section</a> contains a simple explanation of what a JSON Schema is together with a small example. Finally, in the <a href="#notation">third section</a> we present some notation that is used throughout the specification to avoid ambiguities.</p>
+<h2 id="json">JSON</h2>
+<p><a href="http://json.org">JSON</a> (JavaScript Object Notation) is a file format commonly used for sharing information over the Web. JSON files are lightweight and easy to ready both by machines and developers. This has made JSON the most popular file format for client-server communication. A JSON instance is one of the next seven elements:</p>
+<ul>
+<li>
+<p><code>string</code> A string is a sequence of valid characters between quotes. For example, <code>"Hello!"</code> is a string, but <code>23</code> isn't.</p>
+</li>
+<li>
+<p><code>number</code> A number is created using <a href="http://json.org">JSON notation</a>. For example <code>-2</code>, <code>23</code>, <code>3.14</code> and <code>2.54e3</code> are all numbers in JSON. </p>
+</li>
+<li>
+<p><code>integer</code> An integers is a JSON number without a fractional part. For example, <code>34</code> and <code>-91</code> are integers.</p>
+</li>
+<li>
+<p><code>boolean</code> A boolean JSON object is one of two values: <code>true</code> or <code>false</code>.</p>
+</li>
+<li>
+<p><code>null</code> A null object in JSON is the value <code>null</code>.</p>
+</li>
+<li>
+<p><code>array</code> A JSON array is an ordered sequence of JSON documents separated by commas and enclosed in brackets. For example, <code>["Hello", 23, true, null]</code> is a JSON array, as well as <code>[-2, -1, 3.14, 1.62e10]</code>.</p>
+</li>
+<li>
+<p><code>object</code> A JSON object is a set of pairs of the form <code>key:value</code>, where <code>key</code> is a JSON string and <code>value</code> is a JSON document. These pairs are separated by commas and enclosed in braces. JSON objects are the most common type of JSON documents. For instance, to describe specific information about a product, we might want to remember its <em>id</em>, <em>name</em> and the quantity of the product remaining in stock. The following JSON object contains this information:</p>
+</li>
+</ul>
+<p><strong>milk.json</strong></p>
+<pre><code>{
+     "id": 1,
+     "name": "Milk",
+     "stock": 25     
+}</code></pre>
+
+<p>Basic JSON constructs described above can be combined to create more complex documents. To illustrate this consider a situation where we want to store information about multiple products. In order to do so we could use an <code>array</code> of <code>objects</code> of the form above. As an example consider the following JSON document.</p>
+<p><strong>products.json</strong></p>
+<pre><code>[
+    {"id": 1,
+     "name": "Milk",
+     "stock": 25},
+    {"id": 2,
+     "name": "Yogurt",
+     "stock": 15,
+     "link": "http://delicious-yogurt.com"}
+]</code></pre>
+
+<p>Here our JSON document is an <code>array</code> that consists of two <code>objects</code>, the first one storing information about Milk and the second one about Yogurt.</p>
+<h2 id="json-schema">JSON Schema</h2>
+<p>A JSON Schema is a file that specifies the structure of <a href="#json">JSON documents</a> that are used in a certain application. For example, owners of a store might want to share documents with the information about products. Here, a JSON Schema could specify that each such document is a list of products, and that each product contains an <em>id</em>, a <em>name</em>, a <em>stock</em> and optionally a <em>link</em> to the manufacturer's website. Since it is very simple to verify if a JSON document <em>satisfies</em>  a schema, using a schema would be useful to ensure that all shared documents have this structure. The next JSON Schema specifies the structure of an <code>array</code> <strong>products.json</strong> defined above:</p>
+<p><strong>product_list_schema.json</strong></p>
+<pre><code>{  
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "id": {"type": "integer"},
+            "name": {"type": "string"},
+            "stock": {"type": "integer"},
+            "link": {"type": "string"},
+        },
+        "required": ["id", "name", "stock"],
+        "additionalProperties": false
+    }
+}</code></pre>
+
+<p>First, <code>"type": "array"</code> indicates that the document must be an array. Then, <code>"items": {...}</code> tells us that each of the array's items must satisfy what's specified in the braces (which is also a schema). Hence, <code>"type": "object"</code> indicates that each item of the array must be an object, and <code>"properties": {...}</code> indicates what should be satisfied (also a schema) by the properties of each product. Finally, <code>"required": ["id", "name", "stock"]</code> specifies that each product must have an <em>id</em>, a <em>name</em> and a <em>stock</em>, and <code>"additionalProperties": false</code> says that a product cannot have properties that are not mentioned in <code>"properties": {...}</code> (and hence the only optional property is <em>link</em>).</p>
+<p>Note that the file <strong>products.json</strong> is <em>correct</em> according to what is specified in <strong>product_list_schema.json</strong>. </p>
+<h2 id="notation">Notation</h2>
+<p><pre>
+<b>JSON Document</b>: A document containing a JSON instance in its content.</p>
+<p><b>JSON Schema Document</b>: A document containing a JSON Schema instance in addition to a set of JSON Schema instance definitions in its content.</p>
+<p><b>JSON Schema</b>: A JSON Schema instance. Note that these kind of instances do not include definitions on their structure.</p>
+<p><b>definitions</b> : A set of auxiliary schemas whose purpouse is to be reused and combined later on the schema or in other definitions. You can take a look at the precise formalization <a href="../definitions_references/#definitions">here</a>.</p>
+<p><b>key-value pair</b>: A key-value pair represents an assigment from a particular keyword to a JSON instance.</p>
+<p><b>restriction</b>: A single condition that a JSON instance must satisfy. A JSON Schema can be seen as a set of restrictions.
+</pre></p>
+<p>We use a simple, visual-based Extended Backus-Naur Form (EBNF) notation to specify how documents are written.  You can look at the <a href="../grammar/#notation">Precise Definition</a>.</p>
+<h2 id="where-to-go-from-here">Where to go from here</h2>
+<p>You can visit our <a href="#TODO">User Guide</a> for a quick reference on how to create JSON Schemas. If you want to understand in detail how a keyword is validated, please go to the corresponding section of the specification. The specification is intended to be exhaustive and should contain the information needed to write your own JSON Schema validator (if this is not the case please open an issue).</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script src="../../js/base.js"></script>
+    </body>
+</html>
