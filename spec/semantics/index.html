@@ -245,10 +245,10 @@
 <ul>
 <li>One of the key:value pairs in <strong>S</strong> is a JSON reference <strong>R</strong>, and <strong>J</strong> validates against <strong>R</strong> under <strong>D</strong>. </li>
 <li>One of the key:value pairs in <strong>S</strong> is a JSON reference <strong>R</strong>, <strong>EVAL(D,R)</strong> returns error, and for each key:value pair <strong>k</strong> in <strong>S</strong> such that <strong>Compatible(J,k) = true</strong> we have that <strong>J</strong> validates against <strong>k</strong>. </li>
-<li><strong>S</strong> does not contain a JSON Reference, and for each key:value pair <strong>k</strong> in <strong>S</strong> such that <strong>Compatible(J,k) = true</strong> we have that <strong>J</strong> validates against <strong>k</strong>. </li>
+<li><strong>S</strong> does not contain a JSON Reference, and for each key:value pair <strong>k</strong> in <strong>S</strong> such that <strong>Compatible(J,k) = true</strong> we have that <strong>J</strong> validates against <strong>k</strong> under <strong>S</strong>. </li>
 </ul>
 <p>Note how we make a special case when <strong>J</strong> is a JSON reference. In this case, but only if the reference sucessfully retrieves a schema, we ignore all the remaining keywords, and just validate against the schema retrieved by the reference. </p>
-<p>In turn, let <strong>k</strong> be a key:value pair and <strong>J</strong> a JSON document. We say that <strong>J</strong> validates against <strong>k</strong> if one of the following holds: </p>
+<p>In turn, let <strong>S</strong> be a JSON schema, <strong>k</strong> be a key:value pair in <strong>S</strong> and <strong>J</strong> a JSON document. We say that <strong>J</strong> validates against <strong>k</strong> under <strong>S</strong> if one of the following holds: </p>
 <h3 id="general-restrictions">General Restrictions</h3>
 <ul>
 <li><strong>k</strong> is <code>"type: [t<sub>1</sub>, ... ,t<sub>n</sub>]"</code> and the type of <strong>J</strong> is <strong>t<sub>i</sub></strong> for some <strong>t<sub>i</sub></strong> in <strong>{ t<sub>1</sub>,  ...,  t<sub>n</sub> }</strong>.</li>
