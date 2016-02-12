@@ -99,7 +99,7 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../grammar/">Grammar</a>
+                            <a href="../grammar/">Syntax</a>
                         </li>
                     
                         <li class="active">
@@ -189,7 +189,7 @@
 </tr>
 <tr>
 <td>object</td>
-<td>"type", "properties", "additionalProperties", "required", "minProperties", "maxProperties", "dependencies", "patternProperties", "regexp"</td>
+<td>"type", "properties", "additionalProperties", "required", "minProperties", "maxProperties", "dependencies", "patternProperties".</td>
 </tr>
 </tbody>
 </table>
@@ -202,7 +202,7 @@
 </thead>
 <tbody>
 <tr>
-<td>"type", "minLength", "maxLength",  "pattern", "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf", "minItems", "maxItems", "items", "uniqueItems", "properties", "additionalProperties", "required", "minProperties", "maxProperties", "dependencies", "patternProperties", "regexp"</td>
+<td>"type", "minLength", "maxLength",  "pattern", "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf", "minItems", "maxItems", "items", "uniqueItems", "properties", "additionalProperties", "required", "minProperties", "maxProperties", "dependencies", "patternProperties".</td>
 </tr>
 </tbody>
 </table>
@@ -251,44 +251,58 @@
 <p>In turn, let <strong>S</strong> be a JSON schema, <strong>k</strong> be a key:value pair in <strong>S</strong> and <strong>J</strong> a JSON document. We say that <strong>J</strong> validates against <strong>k</strong> under <strong>S</strong> if one of the following holds: </p>
 <h3 id="general-restrictions">General Restrictions</h3>
 <ul>
+<li><strong>k</strong> is <code>"type": "string"</code> and <strong>J</strong> is a string.</li>
+<li><strong>k</strong> is <code>"type": "number"</code> and <strong>J</strong> is a number.</li>
+<li><strong>k</strong> is <code>"type": "integer"</code> and <strong>J</strong> is an integer.</li>
+<li><strong>k</strong> is <code>"type": "boolean"</code> and <strong>J</strong> is a boolean value.</li>
+<li><strong>k</strong> is <code>"type": "null"</code> and <strong>J</strong> is the value null.</li>
+<li><strong>k</strong> is <code>"type": "array"</code> and <strong>J</strong> is an array.</li>
+<li><strong>k</strong> is <code>"type": "object"</code> and <strong>J</strong> is an object.</li>
 <li><strong>k</strong> is <code>"type: [t<sub>1</sub>, ... ,t<sub>n</sub>]"</code> and the type of <strong>J</strong> is <strong>t<sub>i</sub></strong> for some <strong>t<sub>i</sub></strong> in <strong>{ t<sub>1</sub>,  ...,  t<sub>n</sub> }</strong>.</li>
 <li><strong>k</strong> is <code>"enum": [j<sub>1</sub>, ... ,j<sub>n</sub>] </code> and <strong>J</strong> = <strong>j<sub>i</sub></strong> for some <strong>j<sub>i</sub></strong> in <strong>{ j<sub>1</sub>,  ...,  j<sub>n</sub> }</strong>.</li>
 </ul>
 <h3 id="strings-restrictions">Strings Restrictions</h3>
 <ul>
-<li><strong>k</strong> is of the form <code>"minLength" : n</code> and <strong>J</strong> is a string of length at least <strong>n</strong></li>
-<li><strong>k</strong> is of the form <code>"maxLength" : n</code> and <strong>J</strong> is a string of length at most <strong>n</strong></li>
-<li><strong>k</strong> is of the form <code>"pattern" : r</code> and <strong>J</strong> is a string that matches the regular expression <strong>r</strong></li>
+<li><strong>k</strong> is of the form <code>"minLength" : n</code> and <strong>J</strong> is a string of length at least <strong>n</strong>.</li>
+<li><strong>k</strong> is of the form <code>"maxLength" : n</code> and <strong>J</strong> is a string of length at most <strong>n</strong>.</li>
+<li><strong>k</strong> is of the form <code>"pattern" : "rexp"</code> and <strong>J</strong> is a string that matches the regular expression rexp.</li>
 </ul>
 <h3 id="numeric-restrictions">Numeric Restrictions</h3>
 <ul>
-<li><strong>k</strong> is <code>"multipleOf": n</code>, for some number <strong>n</strong>, and <strong>J</strong> is a number that is a multpiple of <strong>n</strong>, or </li>
-<li><strong>k</strong> is <code>"minimum": n</code>, for some number <strong>n</strong>, and <strong>J</strong> is a number that is greater than or equal to <strong>n</strong>, or</li>
-<li><strong>k</strong> is <code>"maximum": m</code>, for some number <strong>m</strong>, and <strong>J</strong> is a number that is less than or equal to <strong>m</strong>, or</li>
-<li><strong>k</strong> is <code>"exclusiveMinimum": true</code>, the pair <code>"minimum": n</code> for some number <strong>n</strong> is also in <strong>N</strong>, and <strong>J</strong> is a number that is greater than <strong>n</strong>, or</li>
-<li><strong>k</strong> is <code>"exclusiveMaximum": true</code>, the pair <code>"maximum": m</code> for some number <strong>m</strong> is also in <strong>N</strong>, and <strong>J</strong> is a number that is less than <strong>m</strong></li>
+<li><strong>k</strong> is <code>"multipleOf": r</code> for some positive decimal number <strong>r</strong>, and <strong>J</strong> is a number that is a multpiple of <strong>r</strong>.</li>
+<li><strong>k</strong> is <code>"minimum": r</code> for some decimal <strong>r</strong>, and <strong>J</strong> is a number that is strictly greater than <strong>r</strong>.</li>
+<li><strong>k</strong> is <code>"minimum": r</code> for some decimal <strong>r</strong>,  <strong>J</strong> is a number that is equal to <strong>r</strong> and the pair <code>"exclusiveMinimum": true</code> is not in <strong>S</strong>.</li>
+<li><strong>k</strong> is <code>"maximum": r</code>, for some decimal  <strong>r</strong>, and <strong>J</strong> is a number that is stricly less than <strong>r</strong>.</li>
+<li><strong>k</strong> is <code>"maximum": r</code> for some decimal <strong>r</strong>,  <strong>J</strong> is a number that is equal to <strong>r</strong> and the pair <code>"exclusiveMinimum": true</code> is not in <strong>S</strong>.</li>
 </ul>
 <h3 id="arrays-restrictions">Arrays Restrictions</h3>
 <ul>
-<li><b>k</b> is <code>"items": s</code> and <b>J</b> is an array such that every element validates against <strong>s</strong></li>
-<li><b>k</b> is <code>"items": [s<sub>1</sub> , ... , s<sub>n</sub>]</code> and <b>J</b> is an array <code>[a<sub>1</sub> , ... , a<sub>m</sub>]</code> such that every element <strong>a<sub>i</sub></strong> validates against <strong>s<sub>i</sub></strong> with <strong>i</strong> ≤ Min(<strong>m</strong>,<strong>n</strong>).</li>
+<li><b>k</b> is <code>"items": S'</code> and <b>J</b> is an array such that every element validates against S'.</li>
+<li><b>k</b> is <code>"items": [s<sub>1</sub> , ... , s<sub>n</sub>]</code> and <b>J</b> is an array <code>[a<sub>1</sub> , ... , a<sub>m</sub>]</code> such that every element <strong>a<sub>i</sub></strong> validates against <strong>s<sub>i</sub></strong> with <strong>i</strong> ≤ Min(m,n).</li>
+<li><strong>k</strong> is <code>"additionalItems": true</code> and <b>J</b> is an array.</li>
 <li><b>k</b> is <code>"additionalItems": false</code>, there is a key:value pair <code>"items": [s<sub>1</sub> , ... , s<sub>n</sub>]</code> in <strong>S</strong> and <strong>J</strong> is an array with at most n elements. </li>
-<li><b>k</b> is <code>"minItems": n</code> and <b>J</b> is an array with at least n elements</li>
-<li><b>k</b> is <code>"maxItems": n</code> and <b>J</b> is an array with at most n elements</li>
-<li><b>k</b> is <code>"uniqueItems": true</code> and <b>J</b> is an array with all elements different from each other</li>
+<li><b>k</b> is <code>"additionalItems": false</code>, and either <strong>S</strong> does not contain a pair with keyword <code>"items"</code>, or such pair is of the form <code>"items": S'</code> (that is, the value of items is an object, not an array). </li>
+<li><b>k</b> is <code>"additionalItems": S'</code>, <strong>S</strong> does not contain a pair with keyword <code>"items"</code> and <b>J</b> is an array such that every element validates against S'.</li>
+<li><b>k</b> is <code>"additionalItems": S'</code> and <strong>S</strong> contains a pair of the form <code>"items": S'</code> (that is, the value of items is an object, not an array). </li>
+<li><strong>k</strong> is <code>"additionalItems": S'</code>, <strong>S</strong> has a pair of form <code>"items": [s<sub>1</sub> , ... , s<sub>n</sub>]</code>, and <b>J</b> is an array <code>[a<sub>1</sub> , ... , a<sub>m</sub>]</code> such that each a<sub>i</sub>, for i &gt; n, validates against <strong>S'</strong>. </li>
+<li><b>k</b> is <code>"minItems": n</code> and <b>J</b> is an array with at least n elements.</li>
+<li><b>k</b> is <code>"maxItems": n</code> and <b>J</b> is an array with at most n elements.</li>
+<li><b>k</b> is <code>"uniqueItems": true</code> and <b>J</b> is an array with all elements different from each other.</li>
 </ul>
 <h3 id="object-restrictions">Object Restrictions</h3>
 <ul>
-<li><strong>k</strong> is of the form <code>"properties": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code> and <b>J</b> is an object that for each key-value pair <b>k': j'</b> in <b>J</b>, if <b>k' = k<sub>i</sub></b> for some <strong>i</strong> in [ <strong>1</strong> , ... , <strong>n</strong> ] then <b>j'</b> satisfies <b>s<sub>i</sub></b></b></li>
+<li><strong>k</strong> is of the form <code>"properties": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code> and <b>J</b> is an object that for each key-value pair <b>k': j'</b> in <b>J</b>, if <b>k' = k<sub>i</sub></b> for some <strong>i</strong> in [ <strong>1</strong> , ... , <strong>n</strong> ] then <b>j'</b> satisfies <b>s<sub>i</sub></b></b>.</li>
+<li><strong>k</strong> is of the form <code>"patternProperties": {rexp<sub>1</sub>: s<sub>1</sub> , ... , rexp<sub>n</sub>: s<sub>n</sub>}</code> and <b>J</b> is an object such that for each key-value pair <b>k': j'</b> in <b>J</b> and 
+every rexp<sub>i</sub>, i in [ <strong>1</strong> , ... , <strong>n</strong> ], such that <strong>k'</strong> is in the language of rexp<sub>i</sub>, then 
+<b>j'</b> satisfies <b>s<sub>i</sub></b></b>.</li>
+<li><strong>k</strong> is of the form <code>"required": [k<sub>1</sub> , ... , k<sub>n</sub>]</code> and each <b>k<sub>i</sub></b></b> appears in <strong>J</strong>. </li>
+<li><strong>k</strong> is of the form <code>"minProperties": n</code> and <b>J</b> is an object with at least <strong>n</strong> key:value pairs.</li>
+<li><strong>k</strong> is of the form <code>"maxProperties": n</code> and <b>J</b> is an object with at most <strong>n</strong> key:value pairs.</li>
 <li><strong>k</strong> is of the form <code>"additionalProperties": false</code> and <b>J</b> is an object such that every keyword in <b>J</b> either belongs to <strong>properties(S)</strong> or matches at least one of the expressions in <strong>patternProperties(S)</strong></li>
 <li><strong>k</strong> is of the form <code>"additionalProperties": true</code> and <b>J</b> is an object</li>
-<li><strong>k</strong> is of the form <code>"additionalProperties": s</code> and <b>J</b> is an object such that for each key-value pair <b>k': j'</b> in <b>J</b>, with <b>k'</b> not in <strong>properties(S)</strong> and <strong>k'</strong> not matching any of the expressions in <strong>patternProperties(S)</strong>, we have that <b>j'</b> validates against <b>s</b></li>
-<li><strong>k</strong> is of the form <code>"required": [k<sub>1</sub> , ... , k<sub>n</sub>]</code> and each <b>k<sub>i</sub></b></b> appears in <strong>J</strong>. </li>
-<li><strong>k</strong> is of the form <code>"minProperties": n</code> and <b>J</b> is an object with at least <strong>n</strong> key:value pairs</li>
-<li><strong>k</strong> is of the form <code>"maxProperties": n</code> and <b>J</b> is an object with at most <strong>n</strong> key:value pairs</li>
+<li><strong>k</strong> is of the form <code>"additionalProperties": S'</code> and <b>J</b> is an object such that for each key-value pair <b>k': j'</b> in <b>J</b>, with <b>k'</b> not in <strong>properties(S)</strong> and <strong>k'</strong> not matching any of the expressions in <strong>patternProperties(S)</strong>, we have that <b>j'</b> validates against <b>S'</b></li>
 <li><strong>k</strong> is of the form <code>"dependencies": {k<sub>1</sub>: [l<sub>1,1</sub> , ... ,l<sub>1,m<sub>1</sub></sub>], ... , k<sub>n</sub>: [l<sub>n,1</sub> , ... ,l<sub>n,m<sub>n</sub></sub>]}</code> and <b>J</b> is an object such that if <strong>k<sub>i</sub></strong> appears in <b>J</b> then every keyword in <strong>[l<sub>i,1</sub> , ... ,l<sub>i,m<sub>i</sub></sub>]</strong> appears in <b>J</b></li>
 <li><strong>k</strong> is of the form <code>"dependencies": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code>  and <b>J</b> is an object such that if <b>k<sub>i</sub></b> appears in <b>J</b> then <b>J</b> must satisfy <b>s<sub>i</sub></b></li>
-<li><strong>k</strong> is of the form <code>"patternProperties": {regexp<sub>1</sub>: s<sub>1</sub> , ... , regexp<sub>n</sub>: s<sub>n</sub>}</code> and <b>J</b> is an object such that for each key-value pair <b>k': j'</b> in <b>J</b>, if <b>k'</b> is in the language of  regexp<sub>i</sub> for some i in [ <strong>1</strong> , ... , <strong>n</strong> ] then <b>j'</b> satisfies <b>s<sub>i</sub></b></b></li>
 </ul>
 <h3 id="combinations">Combinations</h3>
 <ul>

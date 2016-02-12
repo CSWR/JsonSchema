@@ -99,7 +99,7 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../grammar/">Grammar</a>
+                            <a href="../grammar/">Syntax</a>
                         </li>
                     
                         <li >
@@ -283,28 +283,32 @@
 <pre>
  <b>arrSch</b>:= "type": "array" (, <b>arrRes</b>)<sup>*</sup>
 </pre></p>
-<p>Here <strong>arrRes</strong> is a restriction for the type array such that every <strong>arrRes</strong> must be different from each other and occurs no more than one time each. Each of these restrictions is defined as follows:</p>
+<p>Here <strong>arrRes</strong> is a restriction for the type array such that every <strong>arrRes</strong> must be different from each other and occurs no more than one time each. Each of these restrictions is defined as follows:
 <pre>
- <b>arrRes</b> := <b>items</b> | <b>additems</b> | <b>minitems</b> | <b>maxitems</b> | <b>unique</b>
+ <b>arrRes</b> := <b>items</b> | <b>additems</b> | <b>minitems</b> | <b>maxitems</b>  | <b>unique</b>
  <b>items</b> := ( <b>sameitems</b> |  <b>varitems</b> )
  <b>sameitems</b> := "items": { <b>JSch</b> }
- <b>varitems</b> := "items": [{ <b>JSch</b> }(,{ <b>JSch</b> })<sup>*</sup>] (, "additionalItems": false)?
- <b>minitems</b> := "minItems": n
- <b>maxitems</b> := "maxItems": n
- <b>unique</b> := "uniqueItems": (true | false)
-</pre>
-
-<p>Here <strong>n</strong> is a natural number and <b>JSch</b> a JSON Schema. Note that we do not include <code>"additionalItems": true</code> in <strong>varitems</strong>, since it is the default. </p>
+ <b>varitems</b> := "items": [{ <b>JSch</b> }(,{ <b>JSch</b> })*] 
+ <b>additems</b> :=  "additionalItems": (<b>bool</b> | { <b>JSch</b> })
+ <b>minitems</b> := "minItems": <b>n</b>
+ <b>maxitems</b> := "maxItems": <b>n</b>
+ <b>unique</b> := "uniqueItems": <b>bool</b>
+</pre></p>
+<p>Here <strong>n</strong> is a natural number and <strong>bool</strong> is either true or false.</p>
 <h3 id="formal-validation">Formal Validation</h3>
 <p>Let <b>A</b> be an Array Schema and <b>J</b> a JSON document. We say that <b>J</b> validates against <b>A</b> if for each key:value pair <b>k</b> in <b>A</b> one of the following holds:</p>
 <ul>
-<li><b>k</b> is <code>"type": "array"</code> and <b>J</b> is an array</li>
-<li><b>k</b> is <code>"items": s</code> and <b>J</b> is an array such that every element validates against <strong>s</strong></li>
-<li><b>k</b> is <code>"items": [s<sub>1</sub> , ... , s<sub>n</sub>]</code> and <b>J</b> is an array <code>[a<sub>1</sub> , ... , a<sub>m</sub>]</code> such that every element <strong>a<sub>i</sub></strong> validates against <strong>s<sub>i</sub></strong> with <strong>i</strong> ≤ Min(<strong>m</strong>,<strong>n</strong>).</li>
+<li><b>k</b> is <code>"items": S'</code> and <b>J</b> is an array such that every element validates against S'.</li>
+<li><b>k</b> is <code>"items": [s<sub>1</sub> , ... , s<sub>n</sub>]</code> and <b>J</b> is an array <code>[a<sub>1</sub> , ... , a<sub>m</sub>]</code> such that every element <strong>a<sub>i</sub></strong> validates against <strong>s<sub>i</sub></strong> with <strong>i</strong> ≤ Min(m,n).</li>
+<li><strong>k</strong> is <code>"additionalItems": true</code> and <b>J</b> is an array.</li>
 <li><b>k</b> is <code>"additionalItems": false</code>, there is a key:value pair <code>"items": [s<sub>1</sub> , ... , s<sub>n</sub>]</code> in <strong>A</strong> and <strong>J</strong> is an array with at most n elements. </li>
-<li><b>k</b> is <code>"minItems": n</code> and <b>J</b> is an array with at least n elements</li>
-<li><b>k</b> is <code>"maxItems": n</code> and <b>J</b> is an array with at most n elements</li>
-<li><b>k</b> is <code>"uniqueItems": true</code> and <b>J</b> is an array with all elements different from each other</li>
+<li><b>k</b> is <code>"additionalItems": false</code>, and either <strong>A</strong> does not contain a pair with keyword <code>"items"</code>, or such pair is of the form <code>"items": S'</code> (that is, the value of items is an object, not an array). </li>
+<li><b>k</b> is <code>"additionalItems": S'</code>, <strong>A</strong> does not contain a pair with keyword <code>"items"</code> and <b>J</b> is an array such that every element validates against S'.</li>
+<li><b>k</b> is <code>"additionalItems": S'</code> and <strong>A</strong> contains a pair of the form <code>"items": S'</code> (that is, the value of items is an object, not an array). </li>
+<li><strong>k</strong> is <code>"additionalItems": S'</code>, <strong>A</strong> has a pair of form <code>"items": [s<sub>1</sub> , ... , s<sub>n</sub>]</code>, and <b>J</b> is an array <code>[a<sub>1</sub> , ... , a<sub>m</sub>]</code> such that each a<sub>i</sub>, for i &gt; n, validates against <strong>S'</strong>. </li>
+<li><b>k</b> is <code>"minItems": n</code> and <b>J</b> is an array with at least n elements.</li>
+<li><b>k</b> is <code>"maxItems": n</code> and <b>J</b> is an array with at most n elements.</li>
+<li><b>k</b> is <code>"uniqueItems": true</code> and <b>J</b> is an array with all elements different from each other.</li>
 </ul></div>
         </div>
 

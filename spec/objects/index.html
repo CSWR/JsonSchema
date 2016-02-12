@@ -99,7 +99,7 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../grammar/">Grammar</a>
+                            <a href="../grammar/">Syntax</a>
                         </li>
                     
                         <li >
@@ -461,36 +461,40 @@
 </pre>
 
 <p>Here <strong>objRes</strong> is a restriction for objects such that every <strong>objRes</strong> occurence in the schema is unique. Each of these restrictions is defined as follows:</p>
-<pre> <b>objRes</b> :=  <b>prop</b> | <b>addprop</b> | <b>req</b> | <b>minprop</b> | <b>maxprop</b> | <b>dep</b> | <b>pattprop</b>
- <b>prop</b> := "properties: "{ <b>kSch</b> (, <b>kSch</b>)<sup>*</sup>}
- <b>addprop</b> := "additionalProperties": (true | false | { <b>JSch</b> })
- <b>req</b> := "required": [ <b>kword</b> (, <b>kword</b>)<sup>*</sup>]
- <b>minprop</b> := "minProperties: " n
- <b>maxprop</b> := "maxProperties: " n
- <b>dep</b> := "dependencies: "(<b>depArr</b> | <b>depSch</b>)
- <b>depArr</b> := { <b>kArr</b> (, <b>kArr</b>)<sup>*</sup>}
- <b>depSch</b> := { <b>kSch</b> (, <b>kSch</b>)<sup>*</sup>}
- <b>kArr</b> := <b>kword</b>: [ <b>kword</b> (, <b>kword</b>)<sup>*</sup>]
-<b> kSch </b> := <b>kword</b>: {<b>JSch</b>}
- <b>pattprop</b> := "patternProperties: "{ <b>patSch</b> (, <b>patSch</b>)<sup>*</sup>}
- <b>patSch</b> := regexp: { <b>JSch</b> } </pre>
+<pre>
+<b>objRes</b> := <b>prop</b> | <b>addprop</b> | <b>req</b> | <b>minprop</b> | <b>maxprop</b> | <b>dep</b> | <b>pattprop</b>
+<b>prop</b> := "properties": { <b>kSch</b> (, <b>kSch</b>)*}
+<b>kSch</b> := <b>kword</b>: { <b>JSch</b> }
+<b>addprop</b> := "additionalProperties": (<b>bool</b> | { <b>JSch</b> })
+<b>req</b> := "required": [ <b>kword</b> (, <b>kword</b>)*]
+<b>minprop</b> := "minProperties": <b>n</b>
+<b>maxprop</b> := "maxProperties": <b>n</b>
+<b>dep</b> := "dependencies": (<b>depArr</b> | <b>depSch</b>)
+<b>depArr</b> := { <b>kArr</b> (, <b>kArr</b>)*}
+<b>depSch</b> := { <b>kSch</b> (, <b>kSch</b>)*}
+<b>kArr</b> := <b>kword</b>: [ <b>kword</b> (, <b>kword</b>)*]
+<b>pattprop</b> := "patternProperties": { <b>patSch</b> (, <b>patSch</b>)*}
+<b>patSch</b> := "<b>regExp</b>": { <b>JSch</b> }
+</pre>
 
-<p>Here <strong>n</strong> is a natural number, <b>kword</b> is a JSON string and <b>JSch</b> a JSON Schema. </p>
+<p>Here <strong>n</strong> is a natural number, <strong>bool</strong> is either true or false and <strong>regExp</strong> is a regular expression. Furthermore, <b>kword</b> is a JSON string and <b>JSch</b> a JSON Schema. </p>
 <h3 id="formal-validation">Formal Validation</h3>
 <p>Let <b>O</b> be an object Schema and <b>J</b> a JSON document. We say that a keyword <strong>k</strong> appears in <strong>J</strong> is <strong>J</strong> contains a key:value pair of the form <strong>k: j'</strong>, for some document <strong>j'</strong>. Moreover, we use <strong>properties(O)</strong> to denote all keywords <code>k<sub>1</sub>, ..., k<sub>n</sub></code> that appear in the key-value pair of the form <code>"properties": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code> in <strong>O</strong>. The set <strong>properties(O)</strong> is empty if the keyword properties does not appear in <strong>O</strong>. Likewise, we use <strong>patternProperties(O)</strong> to denote all keywords <code>k<sub>1</sub>, ..., k<sub>n</sub></code> that appear in the key-value pair of the form  <code>"additionalProperties": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code> in <strong>O</strong>. The set <strong> patternProperties(O)</strong> is empty if the keyword <code>patternProperties</code> does not appear in <strong>O</strong>.</p>
 <p>We say that <b>J</b> validates against <b>O</b> if for each key:value pair <b>k</b> in <b>O</b> one of the following holds:</p>
 <ul>
 <li><strong>k</strong> is of the form <code>"type": "object"</code> and <b>J</b> is an object</li>
-<li><strong>k</strong> is of the form <code>"properties": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code> and <b>J</b> is an object that for each key-value pair <b>k': j'</b> in <b>J</b>, if <b>k' = k<sub>i</sub></b> for some <strong>i</strong> in [ <strong>1</strong> , ... , <strong>n</strong> ] then <b>j'</b> satisfies <b>s<sub>i</sub></b></b></li>
+<li><strong>k</strong> is of the form <code>"properties": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code> and <b>J</b> is an object that for each key-value pair <b>k': j'</b> in <b>J</b>, if <b>k' = k<sub>i</sub></b> for some <strong>i</strong> in [ <strong>1</strong> , ... , <strong>n</strong> ] then <b>j'</b> satisfies <b>s<sub>i</sub></b></b>.</li>
+<li><strong>k</strong> is of the form <code>"patternProperties": {rexp<sub>1</sub>: s<sub>1</sub> , ... , rexp<sub>n</sub>: s<sub>n</sub>}</code> and <b>J</b> is an object such that for each key-value pair <b>k': j'</b> in <b>J</b> and 
+every rexp<sub>i</sub>, i in [ <strong>1</strong> , ... , <strong>n</strong> ], such that <strong>k'</strong> is in the language of rexp<sub>i</sub>, then 
+<b>j'</b> satisfies <b>s<sub>i</sub></b></b>.</li>
+<li><strong>k</strong> is of the form <code>"required": [k<sub>1</sub> , ... , k<sub>n</sub>]</code> and each <b>k<sub>i</sub></b></b> appears in <strong>J</strong>. </li>
+<li><strong>k</strong> is of the form <code>"minProperties": n</code> and <b>J</b> is an object with at least <strong>n</strong> key:value pairs.</li>
+<li><strong>k</strong> is of the form <code>"maxProperties": n</code> and <b>J</b> is an object with at most <strong>n</strong> key:value pairs.</li>
 <li><strong>k</strong> is of the form <code>"additionalProperties": false</code> and <b>J</b> is an object such that every keyword in <b>J</b> either belongs to <strong>properties(O)</strong> or matches at least one of the expressions in <strong>patternProperties(O)</strong></li>
 <li><strong>k</strong> is of the form <code>"additionalProperties": true</code> and <b>J</b> is an object</li>
-<li><strong>k</strong> is of the form <code>"additionalProperties": s</code> and <b>J</b> is an object such that for each key-value pair <b>k': j'</b> in <b>J</b>, with <b>k'</b> not in <strong>properties(O)</strong> and <strong>k'</strong> not matching any of the expressions in <strong>patternProperties(O)</strong>, we have that <b>j'</b> validates against <b>s</b></li>
-<li><strong>k</strong> is of the form <code>"required": [k<sub>1</sub> , ... , k<sub>n</sub>]</code> and each <b>k<sub>i</sub></b></b> appears in <strong>J</strong>. </li>
-<li><strong>k</strong> is of the form <code>"minProperties": n</code> and <b>J</b> is an object with at least <strong>n</strong> key:value pairs</li>
-<li><strong>k</strong> is of the form <code>"maxProperties": n</code> and <b>J</b> is an object with at most <strong>n</strong> key:value pairs</li>
+<li><strong>k</strong> is of the form <code>"additionalProperties": S'</code> and <b>J</b> is an object such that for each key-value pair <b>k': j'</b> in <b>J</b>, with <b>k'</b> not in <strong>properties(O)</strong> and <strong>k'</strong> not matching any of the expressions in <strong>patternProperties(O)</strong>, we have that <b>j'</b> validates against <b>S'</b></li>
 <li><strong>k</strong> is of the form <code>"dependencies": {k<sub>1</sub>: [l<sub>1,1</sub> , ... ,l<sub>1,m<sub>1</sub></sub>], ... , k<sub>n</sub>: [l<sub>n,1</sub> , ... ,l<sub>n,m<sub>n</sub></sub>]}</code> and <b>J</b> is an object such that if <strong>k<sub>i</sub></strong> appears in <b>J</b> then every keyword in <strong>[l<sub>i,1</sub> , ... ,l<sub>i,m<sub>i</sub></sub>]</strong> appears in <b>J</b></li>
 <li><strong>k</strong> is of the form <code>"dependencies": {k<sub>1</sub>: s<sub>1</sub> , ... , k<sub>n</sub>: s<sub>n</sub>}</code>  and <b>J</b> is an object such that if <b>k<sub>i</sub></b> appears in <b>J</b> then <b>J</b> must satisfy <b>s<sub>i</sub></b></li>
-<li><strong>k</strong> is of the form <code>"patternProperties": {regexp<sub>1</sub>: s<sub>1</sub> , ... , regexp<sub>n</sub>: s<sub>n</sub>}</code> and <b>J</b> is an object such that for each key-value pair <b>k': j'</b> in <b>J</b>, if <b>k'</b> is in the language of  regexp<sub>i</sub> for some i in [ <strong>1</strong> , ... , <strong>n</strong> ] then <b>j'</b> satisfies <b>s<sub>i</sub></b></b></li>
 </ul></div>
         </div>
 

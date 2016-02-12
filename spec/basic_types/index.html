@@ -99,7 +99,7 @@
                     <ul class="dropdown-menu">
                     
                         <li >
-                            <a href="../grammar/">Grammar</a>
+                            <a href="../grammar/">Syntax</a>
                         </li>
                     
                         <li >
@@ -162,7 +162,8 @@
 <p>One of the most basic forms of values that appear in JSON documents are strings of text. In JSON schema we can specify that a document is a string by using the keyword <code>string</code> as the value of the name <code>type</code>. That is, the document</p>
 <pre><code>{"type": "string"}</code></pre>
 
-<p>is a JSON Schema that valiadates against any JSON that is a string. Note that a JSON document is a string only if it is a sequence of Unicode characters enclosed in double quotation marks. That is, <code>"I am a string"</code> is a valid JSON document that satisfies the above schema, but so is the sequence <code>"42"</code>, or <code>"true"</code>. On the other hand <code>42</code> is a JSON document that will <em>not</em> satisfy the above schema, and neither will the document <code>true</code>.   </p>
+<p>is a JSON Schema that valiadates against any JSON that is a string. Note that a JSON document is a string only if it is a sequence of Unicode characters enclosed in double quotation marks. That is, <code>"I am a string"</code> is a valid JSON document that satisfies the above schema, but so is the sequence <code>"42"</code>, or <code>"true"</code>. On the other hand
+<code>42</code> is a JSON document that will <em>not</em> satisfy the above schema, and neither will the document <code>true</code>.   </p>
 <h3 id="restrictions">Restrictions</h3>
 <p>In order to control the length of our string we can use the keywords <code>minLength</code> and <code>maxLength</code>. To restrict the shape of the string even further we can specify that it conforms to a regular expression using the keyword <code>pattern</code>. </p>
 <h4 id="restricting-the-length-of-a-string">Restricting the length of a string</h4>
@@ -181,93 +182,108 @@
   "pattern": "^[A-Za-z]*@gmail.com$"
 }</code></pre>
 
-<p>Here we are specifying that the email address must end with <code>@gmail.com</code>, while the part <code>[A-Za-z]*</code> allows any string consisting of either lowercase or uppercase characters. The symbols <code>^</code> and <code>$</code> are used to signify that the matching of a regular expression is done against the entire string. Therefore, the document <code>"adam@gmail.com"</code> validates against the schema above, but <code>"g42s@gmail.com"</code> does not validate, as the first part before the @ contains a character that is not a letter.</p>
+<p>Here we are specifying that the email address must end with <code>@gmail.com</code>, while the part <code>[A-Za-z]*</code> allows any string consisting of either lower or upper case characters. The symbols <code>^</code> and <code>$</code> are used to signify that the matching of a regular expression is done against the entire string. Therefore, the document <code>"adam@gmail.com"</code> validates against the schema above, but <code>"g42s@gmail.com"</code> does not validate, as the first part before the @ contains a character that is not a letter.</p>
 <p>For a more detailed introduction to regular expressions we refer the reader to check out the <a href="http://www.regexone.com">RegexOne website</a>.</p>
 <h3 id="formal-specification">Formal Specification</h3>
 <p>String Schemas <strong>strSch</strong> are formally specified using the following grammar.</p>
 <pre>
 <b>strSch</b> := "type": "string" (, <b>strRes</b>)<sup>*</sup>
 <b>strRes</b> :=  <b>minLen</b> | <b>maxLen</b> | <b>pattern</b>
-<b>minLen</b> := "minLength": n
-<b>maxLen</b> := "maxLength": n
-<b>pattern</b> := "pattern": r
+<b>minLen</b> := "minLength": <b>n</b>
+<b>maxLen</b> := "maxLength": <b>n</b>
+<b>pattern</b> := "pattern": <b>regExp</b>
 </pre>
 
 <p>where each <strong>strRes</strong> token appears at most once in <strong>strSch</strong>, n is an arbitrary non-negative integer and r is a regular expression as specified in <a href="../www.regexone.com">RegexOne website</a>.</p>
 <h3 id="formal-validation">Formal Validation</h3>
 <p>Let <strong>S</strong> be a String Schema and <strong>J</strong> a JSON document. We say that <strong>J</strong> validates against <strong>S</strong> if for each key:value pair <strong>k</strong> in <strong>S</strong> one of the following holds:</p>
 <ul>
-<li><strong>k</strong> is <code>"type": "string"</code> and <strong>J</strong> is a string</li>
+<li><strong>k</strong> is <code>"type":"string"</code> and <strong>J</strong> is a string</li>
 <li><strong>k</strong> is of the form <code>"minLength" : n</code> and <strong>J</strong> is a string of length at least <strong>n</strong></li>
 <li><strong>k</strong> is of the form <code>"maxLength" : n</code> and <strong>J</strong> is a string of length at most <strong>n</strong></li>
-<li><strong>k</strong> is of the form <code>"pattern" : r</code> and <strong>J</strong> is a string that matches the regular expression <strong>r</strong></li>
+<li><strong>k</strong> is of the form <code>"pattern" : "rexp"</code> and <strong>J</strong> is a string that matches the regular expression <strong>rexp</strong></li>
 </ul>
+<p>Note that in the formal definition we don not enforce the keyword <code>type</code> to be specified. For instance the Schema</p>
+<pre><code>{
+  "minLength": 3,
+  "maxLength": 7
+}</code></pre>
+
+<p>is well specified and will match any string whose length is between three and seven characters. This is a consequence of the fact that in the absence of explicit type definition we can still infer the base type by parsing other keywords. This behavior is specified in the <code>multiple type</code> schemas section. We would, however, like to stress that explicitly specifying the type is a good practice that should always be adhered to.</p>
 <h2 id="numeric-schemas">Numeric Schemas</h2>
-<p>Another form of value in JSON are numbers. In JSON Schema we can specify that a document must be a number by using the <code>type</code> keyword. The document</p>
+<p>Another form of value in JSON are numbers. In JSON Schema we can 
+specify that a document must be a number by using the <code>type</code> keyword. The document</p>
 <pre><code>{"type": "number"}</code></pre>
 
-<p>is a JSON Schema, that specifies any numeric value. For example, values <code>34</code> and <code>1.82</code> validate against <code>{"type": "number"}</code>, while <code>"34"</code>does not, because it is a string. </p>
+<p>is a JSON Schema, and validates against any numeric value. For example, values <code>34</code> and <code>1.82</code> satisfy <code>{"type": "number"}</code>, while <code>"34"</code>does not, because it is a string. </p>
 <p>If we need to specify that a value must be an integer, we use instead the keyword <code>integer</code>:</p>
 <pre><code>{"type": "integer"}</code></pre>
 
-<p>Now the value <code>34</code> validates against this schema, but <code>1.82</code> does not. </p>
+<p>Now the value <code>34</code> satisfies this schema, but <code>1.82</code> does not. </p>
 <h3 id="restrictions_1">Restrictions</h3>
-<p>We can also specify additional constraints that the numbers must satisfy. All of these keywords can be use by either <code>number</code> or <code>integer</code> types.</p>
+<p>We can also specify additional constraints that the numbers must satisfy. All of these keywords can be use by either <code>number</code>
+or <code>integer</code> types.</p>
 <h4 id="range">Range</h4>
-<p>Suppose we need to specify a value for the age of a person, and we want it to be an integer between 0 and 150. We use the  <code>"minimum"</code> and <code>"maximum"</code> keywords:
+<p>Suppose we need to specify a value for the age of a person, and we want it to be an integer between 0 and 150. We use the 
+<code>"minimum"</code> and <code>"maximum"</code> keywords:
 <pre><code>{
    "type": "integer",
    "minimum": 0,
    "maximum": 150
  }</code></pre></p>
-<p>This document specifies any number between <code>0</code> and <code>150</code>. By default the ranges are inclusive: <code>"minimum": n</code> imposes the restriction that numbers need to be <em>greater than or equal to</em> <code>n</code>, and <code>"maximum": m</code> imposes that numbers need to be <em>less than or equal to</em> <code>m</code>. This means that both <code>0</code> and <code>150</code> satisfy the schema above. We can switch the ranges to be exclusive by using the <code>"exclusiveMinimum"</code> and <code>"exclusiveMaximum"</code> keywords. </p>
-<p>For example, the following schema specifies <code>0</code>, but not <code>150</code>:</p>
+<p>This document validates against any number between <code>0</code> and <code>150</code>.
+By default the ranges are inclusive: <code>"minimum": n</code> imposes the restriction that numbers need to be <em>greater than or equal to</em> <code>n</code>, and <code>"minimum": m</code> imposes that numbers need to be <em>less than or equal to</em> <code>m</code>. This means that both <code>0</code> and <code>150</code> satisfy the schema above. We can switch the ranges to be exclusive by using the <code>"exclusiveMinimum"</code> and <code>"exclusiveMaximum"</code> keywords. </p>
+<p>For example, the following schema validates against <code>0</code>, but not against <code>150</code>:</p>
 <p><pre><code> {
-   "type": "integer", 
+   "type":"integer", 
    "minimum": 0, 
    "maximum": 150,
-   "exclusiveMaximum": true
+   "exclusiveMaximum":true
   }</code></pre></p>
-<p>If the <code>"minimum": n</code> keyword is present together with the keyword <code>"exclusiveMinimum": true</code> then the restriction imposes that numbers must be <em>greater</em> than <code>n</code>, and if the <code>"maximum": m</code> keyword is present together with <code>"exclusiveMaximum": true</code> then the restriction is that the number must be <em>lower than</em> <code>m</code>. </p>
+<p>If the <code>"minimum": n</code> keyword is present together with the keyword <code>"exclusiveMinimum":true</code> then the restriction imposes that numbers must be <em>greater</em> than <code>n</code>, and if the <code>"maximum": m</code> keyword is present together with <code>"exclusiveMaximum":true</code> then the restriction is that the number must be <em>lower than</em> <code>m</code>. </p>
 <h4 id="multiplicity">Multiplicity</h4>
 <p>We can also specify that a number must be the multiple of another number, as in the following schema:</p>
 <p><pre><code> {
    "type": "integer", 
    "multipleOf": 10
-  }</code></pre></p>
-<p>This schema specifies any number that is a multiple of <code>10</code>. Note that we can also use real numbers in <code>"multipleOf"</code>, and we can combine it with range restrictions. For example, the numbers <code>3.3</code> and <code>6.6</code> validate against the following schema: </p>
+  }</code></pre>
+This schema validates against any number that is a multiple of <code>10</code>. 
+Note that we can also use real numbers in <code>"multipleOf"</code>, and we can combine it with range restrictions. For example, the schema </p>
 <p><pre><code> {
    "type":"integer", 
    "multipleOf": 3.3,
    "maximum": 7
   }</code></pre></p>
+<p>validates against numbers <code>3.3</code> and <code>6.6</code>.</p>
 <h3 id="formal-specification_1">Formal Specification</h3>
 <p>Numeric schemas <strong>numSch</strong> are constructed using the following grammar:</p>
 <pre>
 <b>numSch</b> := "type": ("number" | "integer") (, <b>numRes</b>)<sup>*</sup>
-<b>numRes</b> := <b>min</b> | <b>max</b> | <b>multiple</b> 
-<b>min</b> := "minimum": n (, "exclusiveMinimum": bool)?
-<b>max</b> := "maximum": n (, "exclusiveMaximum": bool)?
-<b>multiple</b> := "multipleOf": n
+<b>numRes</b> := <b>min</b> | <b>exMin</b> | <b>max</b> | <b>exMax</b> | <b>multiple</b> 
+<b>min</b> := "minimum": <b>r</b> (, "exclusiveMinimum": <b>bool</b>)?
+<b>exMin</b> := "exclusiveMinimum": <b>bool</b>
+<b>max</b> := "maximum": <b>r</b> 
+<b>exMax</b> := "exclusiveMaximum": <b>bool</b>
+<b>multiple</b> := "multipleOf": <b>r</b> (<b>r</b>≥0)
 </pre>
 
-<p>where each <strong>numSch</strong> can have at most one of each <strong>min</strong>, <strong>max</strong> and <strong>multiple</strong>. Here <strong>n</strong> is any number, and <strong>bool</strong> is either <strong>true</strong> or <strong>false</strong>. </p>
+<p>where each <strong>numSch</strong> can have at most one of each <strong>min</strong>, <strong>max</strong> and <strong>multiple</strong>. Here <strong>r</strong> is any positive decimal number, and <strong>bool</strong> is either <strong>true</strong> or <strong>false</strong>. </p>
 <h3 id="validation">Validation</h3>
-<p>Let <strong>N</strong> be a numeric schema and <strong>J</strong> a JSON document. Then <strong>N</strong> validates against <strong>J</strong> if for each key:value pair <strong>k</strong> in <strong>N</strong>, one of the following holds: </p>
+<p>Let <strong>N</strong> be a numeric schema and <strong>J</strong> a JSON document. Then <strong>N</strong> validates against <strong>J</strong> if for each name/value pair <strong>k</strong> in <strong>N</strong>, one of the following holds: </p>
 <ul>
-<li><strong>k</strong> is <code>"type":"number"</code> and <strong>J</strong> is a number, or</li>
-<li><strong>k</strong> is <code>"type":"integer"</code> and <strong>J</strong> is an integer number (a number without the decimal <code>.</code> marker), or</li>
-<li><strong>k</strong> is <code>"multipleOf": n</code>, for some number <strong>n</strong>, and <strong>J</strong> is a number that is a multpiple of <strong>n</strong>, or </li>
-<li><strong>k</strong> is <code>"minimum": n</code>, for some number <strong>n</strong>, and <strong>J</strong> is a number that is greater than or equal to <strong>n</strong>, or</li>
-<li><strong>k</strong> is <code>"maximum": m</code>, for some number <strong>m</strong>, and <strong>J</strong> is a number that is lower than or equal to <strong>m</strong>, or</li>
-<li><strong>k</strong> is <code>"exclusiveMinimum": true</code>, the pair <code>"minimum": n</code> for some number <strong>n</strong> is also in <strong>N</strong>, and <strong>J</strong> is a number that is greater than <strong>n</strong>, or</li>
-<li><strong>k</strong> is <code>"exclusiveMaximum": true</code>, the pair <code>"maximum": m</code> for some number <strong>m</strong> is also in <strong>N</strong>, and <strong>J</strong> is a number that is lower than <strong>m</strong></li>
+<li><strong>k</strong> is <code>"type":"number"</code> and <strong>J</strong> is a number.</li>
+<li><strong>k</strong> is <code>"type":"integer"</code> and <strong>J</strong> is an integer number (a number without the decimal <code>.</code> marker).</li>
+<li><strong>k</strong> is <code>"multipleOf": r</code> for some positive decimal number <strong>r</strong>, and <strong>J</strong> is a number that is a multpiple of <strong>r</strong>.</li>
+<li><strong>k</strong> is <code>"minimum": r</code> for some decimal <strong>r</strong>, and <strong>J</strong> is a number that is strictly greater than <strong>r</strong>.</li>
+<li><strong>k</strong> is <code>"minimum": r</code> for some decimal <strong>r</strong>,  <strong>J</strong> is a number that is equal to <strong>r</strong> and the pair <code>"exclusiveMinimum": true</code> is not in <strong>N</strong>.</li>
+<li><strong>k</strong> is <code>"maximum": r</code>, for some decimal  <strong>r</strong>, and <strong>J</strong> is a number that is stricly less than <strong>r</strong>.</li>
+<li><strong>k</strong> is <code>"maximum": r</code> for some decimal <strong>r</strong>,  <strong>J</strong> is a number that is equal to <strong>r</strong> and the pair <code>"exclusiveMinimum": true</code> is not in <strong>N</strong>.</li>
 </ul>
 <h2 id="boolean-schemas">Boolean Schemas</h2>
 <p>In order to specify a property that can be either true or false we use the value type <code>boolean</code>. A JSON Schema specifying the type <code>boolean</code> is given below.</p>
 <pre><code>{"type": "boolean"}</code></pre>
 
-<p>The only JSON documents that validate against this schema are <code>true</code> and <code>false</code>. Any document of diferent form or of different type, such as <code>"true"</code>, <code>42</code>, or <code>"Number"</code>, will not satsfy the schema. Note that values that usually evaluate to boolean types in programming languages, such as <code>0</code> and <code>1</code> are also not permitted.</p>
+<p>This schema will validate only aginst JSON documents <code>true</code> and <code>false</code>. Any document of diferent form or of different type, such as <code>"true"</code>, <code>42</code>, or <code>"Number"</code>, will not satsfy the schema. Note that values that usually evaluate to boolean values in programming languages, such as <code>0</code> and <code>1</code> are also not permitted.</p>
 <h3 id="formal-specification_2">Formal Specification</h3>
 <p>A Boolean Schema <strong>boolSch</strong> is formally specified using the following grammar.</p>
 <pre><b>boolSch</b> := "type": "boolean"</pre>
@@ -281,7 +297,7 @@
 <p>When specifying that a certain value is missing it is usual to use the type <code>null</code>. A JSON Schema specifying null values is given below.</p>
 <pre><code>{"type": "null"}</code></pre>
 
-<p>The only JSON document that validates against this schema is <code>null</code>; all other JSON documents are rejected. Therefore documents such as <code>"false"</code>, <code>false</code> or <code>0</code> will not validate against the schema above.</p>
+<p>This schema will validate aginst JSON document <code>null</code> and reject all other JSON documents. Therefore documents such as <code>"false"</code>, <code>false</code> or <code>0</code> will not validate against the schema above.</p>
 <h3 id="formal-specification_3">Formal Specification</h3>
 <p>A Schema <strong>nullSch</strong> for <code>null</code> values is formally specified using the following grammar.</p>
 <pre>

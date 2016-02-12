@@ -10,7 +10,7 @@
         <link rel="shortcut icon" href="../../favicon.ico">
         
 
-	<title>Grammar - JSON Schema</title>
+	<title>Syntax - JSON Schema</title>
 
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -99,7 +99,7 @@
                     <ul class="dropdown-menu">
                     
                         <li class="active">
-                            <a href="./">Grammar</a>
+                            <a href="./">Syntax</a>
                         </li>
                     
                         <li >
@@ -134,116 +134,22 @@
             <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#grammar">Grammar</a></li>
-        
-            <li><a href="#json-documents-and-schemas">JSON Documents and Schemas</a></li>
-        
-            <li><a href="#string-restrictions">String Restrictions</a></li>
-        
-            <li><a href="#numeric-restrictions">Numeric Restrictions</a></li>
-        
-            <li><a href="#array-restrictions">Array Restrictions</a></li>
-        
-            <li><a href="#object-restrictions">Object Restrictions</a></li>
-        
-            <li><a href="#multiple-restrictions">Multiple Restrictions</a></li>
-        
-            <li><a href="#referred-schemas">Referred Schemas</a></li>
+        <li class="main active"><a href="#syntax">Syntax</a></li>
         
             <li><a href="#notation">Notation</a></li>
+        
+            <li><a href="#grammar">Grammar</a></li>
+        
+            <li><a href="#well-formedness">Well Formedness</a></li>
         
     
     </ul>
 </div></div>
             <div class="col-md-9" role="main">
 
-<h1 id="grammar"><CENTER>Grammar</CENTER></h1>
+<h1 id="syntax"><CENTER>Syntax</CENTER></h1>
 <p><CENTER>A more formal description of how JSON Schemas are built</CENTER></p>
 <p>In this section we define how every JSON Document can be built using a formal grammar. The purpose of this is to have a rigurous specification for JSON documents and to enable the community to solve ambiguities about each operator and type.</p>
-<p>Formally we define a JSON Schema Document as a set of definitions and a JSON Schema. Each JSON Schema is threated as a set of restrictions that may apply to one or more types. To keep a clean and tidy grammar we divide each restriction in different sections, but as every grammar, the document is defined by the union of all these nested variables.</p>
-<h2 id="json-documents-and-schemas">JSON Documents and Schemas</h2>
-<p>Let <strong>JDOC</strong> be an arbitrary JSON Schema Document. We can define its syntax using the following grammar:
- <pre>
-<b>JSDoc</b> := { ( <b>id</b>, )? ( <b>defs</b>, )? <b>JSch</b> }
-<b>id</b> := "id": "<b>uri</b>"
-<b>defs</b> := "definitions": { <b>kSch (, kSch)</b>*}
-<b>kSch</b> := <b>kword</b>: { <b>JSch</b> }
-<b>JSch</b> := ( <b>res</b> (, <b>res</b>)*)
-<b>res</b> := <b>type</b> | <b>strRes</b> | <b>numRes</b> | <b>arrRes</b> | <b>objRes</b> | <b>multRes</b> | <b>refSch</b>
-<b>type</b> := "type" : ([<b>typename</b> (, <b>typename</b>)*] | <b>typename</b>)
-<b>typename</b> := "string" | "integer" | "number" | "boolean" | "null" | "array" | "object"</pre> </p>
-<p>Here each <strong>res</strong> and <strong>typename</strong> must be different from each other(otherwise they would be superfluous). We must also note that each <strong>kword</strong> is representing a keyword that must be unique in the nest level that is occurs. Finally, a <strong>uri</strong> is any possible uri as defined in the <a href="https://tools.ietf.org/html/rfc3986#section-3.1">standard</a>. Next we specify the remaining restrictions: <strong>strRes</strong>, <strong>numRes</strong>, <strong>arrRes</strong>, <strong>objRes</strong> and <strong>multRes</strong>, as well as referred schemas <strong>refSch</strong>.</p>
-<h2 id="string-restrictions">String Restrictions</h2>
-<pre>
-<b>strRes</b> :=  <b>minLen</b> | <b>maxLen</b> | <b>pattern</b>
-<b>minLen</b> := "minLength": n
-<b>maxLen</b> := "maxLength": n
-<b>pattern</b> := "pattern": r
-</pre>
-
-<p>Here <strong>n</strong> is a natural number and <strong>r</strong> is a regular expression.</p>
-<h2 id="numeric-restrictions">Numeric Restrictions</h2>
-<pre>
-<b>numRes</b> := <b>min</b> | <b>max</b> | <b>multiple</b> 
-<b>min</b> := "minimum": n (, "exclusiveMinimum": bool)?
-<b>max</b> := "maximum": n (, "exclusiveMaximum": bool)?
-<b>multiple</b> := "multipleOf": n
-</pre>
-
-<p>Here <strong>n</strong> is a natural number. As we can see the keywords <code>"exclusiveMinimum"</code> and <code>"exclusiveMaximum"</code> are also restrictions. But since they don't make sense  without the presence of minimum and maximum we force them to appear just in that case.</p>
-<h2 id="array-restrictions">Array Restrictions</h2>
-<pre>
- <b>arrRes</b> := <b>items</b> | <b>additems</b> | <b>minitems</b> | <b>maxitems</b>  | <b>unique</b>
- <b>items</b> := ( <b>sameitems</b> |  <b>varitems</b> )
- <b>sameitems</b> := "items": { <b>JSch</b> }
- <b>varitems</b> := "items": [{ <b>JSch</b> }(,{ <b>JSch</b> })*] (, "additionalItems": bool)?
- <b>minitems</b> := "minItems": n
- <b>maxitems</b> := "maxItems": n
- <b>unique</b> := "uniqueItems": bool
-</pre>
-
-<p>Here <strong>n</strong> is a natural number and <strong>bool</strong> is either true or false.</p>
-<h2 id="object-restrictions">Object Restrictions</h2>
-<pre>
- <b>objRes</b> := <b>prop</b> | <b>addprop</b> | <b>req</b> | <b>minprop</b> | <b>maxprop</b> | <b>dep</b> | <b>pattprop</b>
- <b>prop</b> := "properties: "{ <b>kSch</b> (, <b>kSch</b>)*}
-<b> kSch </b> := <b>kword</b>: { <b>JSch</b> }
- <b>addprop</b> := "additionalProperties": (bool | { <b>JSch</b> })
- <b>req</b> := "required": [ <b>kword</b> (, <b>kword</b>)*]
- <b>minprop</b> := "minProperties": n
- <b>maxprop</b> := "maxProperties": n
- <b>dep</b> := "dependencies": (<b>depArr</b> | <b>depSch</b>)
- <b>depArr</b> := { <b>kArr</b> (, <b>kArr</b>)*}
- <b>depSch</b> := { <b>kSch</b> (, <b>kSch</b>)*}
- <b>kArr</b> := <b>kword</b>: [ <b>kword</b> (, <b>kword</b>)*]
- <b>pattprop</b> := "patternProperties: "{ <b>patSch</b> (, <b>patSch</b>)*}
- <b>patSch</b> := r: { <b>JSch</b> } </pre>
-
-<p>Here <strong>n</strong> is a natural number, <strong>bool</strong> is either true or false and <strong>r</strong> is a regular expression. As above, each <strong>kword</strong> is representing a keyword that must be unique in the nest level that is occurs.</p>
-<h2 id="multiple-restrictions">Multiple Restrictions</h2>
-<pre>
-<b>multRes</b> := <b>allOf</b> | <b>anyOf</b>| <b>oneOf</b> | <b>not</b> | <b>enum</b>
-<b>anyOf</b> := "anyOf": [ { <b>JSch</b> } (, { <b>JSch</b> })*]
-<b>allOf</b> := "allOf": [ { <b>JSch</b> } (, { <b>JSch</b> })* ]
-<b>oneOf</b> := "oneOf": [ { <b>JSch</b> } (, { <b>JSch</b> })* ]
-<b>not</b> := "not": { <b>JSch</b> }
-<b>enum</b> := "enum": [<b>Jval</b> (, <b>Jval</b>)*]
-</pre>
-
-<p>Here <strong>Jval</strong> is either a <code>string</code>, <code>number</code>, <code>array</code>, <code>object</code>, <code>bool</code> or a <code>null</code>  value.</p>
-<h2 id="referred-schemas">Referred Schemas</h2>
-<p>Note that <strong>uriRef</strong> below is the same grammar we defined earlier for URIs. 
-<pre>
-<b>refSch</b> := "$ref": "<b>uriRef</b>" 
-<b>uriRef</b> := ( <b>address</b> )? ( # / <b>JPointer</b> )?
-<b>JPointer</b> := ( / <b>path</b> )<em>
-<b>path</b> := ( <b>unescaped</b> | <b>escaped</b> )</em>
-<b>escaped</b> := ~0 | ~1
-</pre></p>
-<p>Where <strong>unescaped</strong> can be any character except for <code>/</code> and <code>~</code>. Also, <strong>address</strong> corresponds to any URI that does not use the <code>#</code> symbol, or more precisely to any URI-reference constructed using the following grammar, as defined in the <a href="https://tools.ietf.org/html/rfc3986#section-3.1">official standard</a>:
-<pre>
-<b>address</b> = (<b>scheme</b> : )? <b>hier-part</b> (? <b>query</b> ) 
-</pre></p>
 <h2 id="notation">Notation</h2>
 <p>The Formal Grammar in this specification is given using a simple, visual-based Extended Backus-Naur Form (EBNF) notation, that we define below. </p>
 <p>Each rule in the grammar defines one symbol, in the form</p>
@@ -261,7 +167,110 @@
 <li><code>A | B</code>: <code>A</code> or <code>B</code>, matches either <code>A</code> or <code>B</code></li>
 <li><code>A B</code> <code>A</code> concatenated with <code>B</code>, matches <code>A</code> followed by <code>B</code>. This operator has higher precedence over <code>|</code> </li>
 <li><code>E*</code>: Matches zero or more ocurrences of <code>E</code>. Also has a higher precedence over <code>|</code></li>
-</ul></div>
+</ul>
+<h2 id="grammar">Grammar</h2>
+<p>Formally we define a JSON Schema Document as a set of definitions and a JSON Schema. Each JSON Schema is threated as a set of restrictions that may apply to one or more types. To keep a clean and tidy grammar we divide each restriction in different sections, but as every grammar, the document is defined by the union of all these nested variables.</p>
+<h3 id="json-documents-and-schemas">Json Documents and Schemas</h3>
+<p>Let <strong>JDOC</strong> be an arbitrary JSON Schema Document. We can define its syntax using the following grammar:
+ <pre>
+<b>JSDoc</b> := { ( <b>id</b>, )? ( <b>defs</b>, )? <b>JSch</b> }
+<b>id</b> := "id": "<b>uri</b>"
+<b>defs</b> := "definitions": { <b>kSch (, kSch)</b>*}
+<b>kSch</b> := <b>kword</b>: { <b>JSch</b> }
+<b>JSch</b> := ( <b>res</b> (, <b>res</b>)*)
+<b>res</b> := <b>type</b> | <b>strRes</b> | <b>numRes</b> | <b>arrRes</b> | <b>objRes</b> | <b>multRes</b> | <b>refSch</b>
+<b>type</b> := "type" : ([<b>typename</b> (, <b>typename</b>)*] | <b>typename</b>)
+<b>typename</b> := "string" | "integer" | "number" | "boolean" | "null" | "array" | "object"</pre> </p>
+<p>Here each <strong>res</strong> and <strong>typename</strong> must be different from each other(otherwise they would be superfluous). We must also note that each <strong>kword</strong> is representing a keyword that must be unique in the nest level that is occurs. Finally, a <strong>uri</strong> is any possible uri as defined in the <a href="https://tools.ietf.org/html/rfc3986#section-3.1">standard</a>. Next we specify the remaining restrictions: <strong>strRes</strong>, <strong>numRes</strong>, <strong>arrRes</strong>, <strong>objRes</strong> and <strong>multRes</strong>, as well as referred schemas <strong>refSch</strong>.</p>
+<h3 id="string-restrictions">String Restrictions</h3>
+<pre>
+<b>strRes</b> :=  <b>minLen</b> | <b>maxLen</b> | <b>pattern</b>
+<b>minLen</b> := "minLength": <b>n</b>
+<b>maxLen</b> := "maxLength": <b>n</b>
+<b>pattern</b> := "pattern": "<b>regExp</b>"
+</pre>
+
+<p>Here <strong>n</strong> is a natural number and <strong>r</strong> is a regular expression.</p>
+<h3 id="numeric-restrictions">Numeric Restrictions</h3>
+<pre>
+<b>numRes</b> := <b>min</b> | <b>exMin</b> | <b>max</b> | <b>exMax</b> | <b>multiple</b> 
+<b>min</b> := "minimum": <b>r</b> 
+<b>exMin</b> := "exclusiveMinimum": <b>bool</b>
+<b>max</b> := "maximum": <b>r</b> 
+<b>exMax</b> := "exclusiveMaximum": <b>bool</b>
+<b>multiple</b> := "multipleOf": <b>r</b>   (<b>r</b> >= 0)
+</pre>
+
+<p>Here <strong>r</strong> is a decimal number and <strong>bool</strong> is either true or false. </p>
+<h3 id="array-restrictions">Array Restrictions</h3>
+<pre>
+ <b>arrRes</b> := <b>items</b> | <b>additems</b> | <b>minitems</b> | <b>maxitems</b>  | <b>unique</b>
+ <b>items</b> := ( <b>sameitems</b> |  <b>varitems</b> )
+ <b>sameitems</b> := "items": { <b>JSch</b> }
+ <b>varitems</b> := "items": [{ <b>JSch</b> }(,{ <b>JSch</b> })*] 
+ <b>additems</b> :=  "additionalItems": (<b>bool</b> | { <b>JSch</b> })
+ <b>minitems</b> := "minItems": <b>n</b>
+ <b>maxitems</b> := "maxItems": <b>n</b>
+ <b>unique</b> := "uniqueItems": <b>bool</b>
+</pre>
+
+<p>Here <strong>n</strong> is a natural number and <strong>bool</strong> is either true or false.</p>
+<h3 id="object-restrictions">Object Restrictions</h3>
+<pre>
+<b>objRes</b> := <b>prop</b> | <b>addprop</b> | <b>req</b> | <b>minprop</b> | <b>maxprop</b> | <b>dep</b> | <b>pattprop</b>
+<b>prop</b> := "properties": { <b>kSch</b> (, <b>kSch</b>)*}
+<b>kSch</b> := <b>kword</b>: { <b>JSch</b> }
+<b>addprop</b> := "additionalProperties": (<b>bool</b> | { <b>JSch</b> })
+<b>req</b> := "required": [ <b>kword</b> (, <b>kword</b>)*]
+<b>minprop</b> := "minProperties": <b>n</b>
+<b>maxprop</b> := "maxProperties": <b>n</b>
+<b>dep</b> := "dependencies": (<b>depArr</b> | <b>depSch</b>)
+<b>depArr</b> := { <b>kArr</b> (, <b>kArr</b>)*}
+<b>depSch</b> := { <b>kSch</b> (, <b>kSch</b>)*}
+<b>kArr</b> := <b>kword</b>: [ <b>kword</b> (, <b>kword</b>)*]
+<b>pattprop</b> := "patternProperties": { <b>patSch</b> (, <b>patSch</b>)*}
+<b>patSch</b> := "<b>regExp</b>": { <b>JSch</b> }
+</pre>
+
+<p>Here <strong>n</strong> is a natural number, <strong>bool</strong> is either true or false and <strong>regExp</strong> is a regular expression. As above, each <strong>kword</strong> is representing a keyword that must be unique in the nest level that is occurs.</p>
+<h3 id="multiple-restrictions">Multiple Restrictions</h3>
+<p><pre>
+<b>multRes</b> := <b>allOf</b> | <b>anyOf</b>| <b>oneOf</b> | <b>not</b> | <b>enum</b>
+<b>anyOf</b> := "anyOf": [ { <b>JSch</b> } (, { <b>JSch</b> }) * ]
+<b>allOf</b> := "allOf": [ { <b>JSch</b> } (, { <b>JSch</b> }) * ]
+<b>oneOf</b> := "oneOf": [ { <b>JSch</b> } (, { <b>JSch</b> }) * ]
+<b>not</b> := "not": { <b>JSch</b> }
+<b>enum</b> := "enum": [<b>Jval</b> (, <b>Jval</b>)*]
+</pre></p>
+<p>Here <strong>Jval</strong> is either a <code>string</code>, <code>number</code>, <code>array</code>, <code>object</code>, <code>bool</code> or a <code>null</code>  value. Moreover each <strong>Jval</strong> must be different from each other(otherwise they would be superfluous).</p>
+<h3 id="referred-schemas">Referred Schemas</h3>
+<p>Note that <strong>uriRef</strong> below is the same grammar we defined earlier for URIs. 
+<pre>
+<b>refSch</b> := "$ref": "<b>uriRef</b>" 
+<b>uriRef</b> := ( <b>address</b> )? ( # / <b>JPointer</b> )?
+<b>JPointer</b> := ( / <b>path</b> )<em>
+<b>path</b> := ( <b>unescaped</b> | <b>escaped</b> )</em>
+<b>escaped</b> := ~0 | ~1
+</pre></p>
+<p>Where <strong>unescaped</strong> can be any character except for <code>/</code> and <code>~</code>. Also, <strong>address</strong> corresponds to any URI that does not use the <code>#</code> symbol, or more precisely to any URI-reference constructed using the following grammar, as defined in the <a href="https://tools.ietf.org/html/rfc3986#section-3.1">official standard</a>:
+<pre>
+<b>address</b> = (<b>scheme</b> : )? <b>hier-part</b> (? <b>query</b> ) 
+</pre></p>
+<h2 id="well-formedness">Well Formedness</h2>
+<p>The grammar above allow for some problematic schemas that need to be left out using a notion that we call <em>well formedness</em>. </p>
+<p>As an example of a problematic schema, consider the following: 
+<pre><code>{
+    "definitions": {
+        "Schema1": {
+            "not": {"$ref": "#/definitions/Schema1"}
+        }
+    },
+    "$ref": "#/definitions/Schema1"       <br />
+}</code></pre></p>
+<p>The above defines a Schema that is both S and not S at the same time! </p>
+<p>Let <strong>S</strong> be a JSON Schema document, and let <strong>S<sub>1</sub></strong>,...,<strong>S<sub>n</sub></strong> be all the schemas retrieved by any JSON Pointer inside <strong>S</strong>.  The <em>reference graph</em> of S is a directed graph whose set of nodes is {<strong>S<sub>1</sub></strong>,...,<strong>S<sub>n</sub></strong>} and where there is an edge from <strong>S<sub>i</sub></strong> to <strong>S<sub>j</sub></strong> if <strong>S_i</strong> is a boolean combination of schemas and at least one of those schemas corresponds to the JSON Pointer that retrieves <strong>S<sub>j</sub></strong>. For instance, the graph of the document above has only one node, corresponding to the subschema defined under <code>"Schema1"</code>, and the only edge is a self loop on this node. Edges are only added if <strong>S<sub>i</sub></strong> is a boolean combination of schemas, not if, for example, <strong>S<sub>i</sub></strong> is an object and a reference inside a <code>"properties"</code> keyword retrieves <strong>S<sub>j</sub></strong>.</p>
+<p>We say that <strong>S</strong> is a well formed Schema if the reference graph of <strong>S</strong> is acyclic. </p>
+<p>We propose to add the well formedness condition to the Schema, and we assume that all schemas are well formed whenever we talk about conformance to this document. </p></div>
         </div>
 
         <footer class="col-md-12">
