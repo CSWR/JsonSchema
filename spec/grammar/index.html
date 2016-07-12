@@ -98,12 +98,37 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Formal Specification <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                     
+                        <li >
+                            <a href="../why/">Why a formal specification?</a>
+                        </li>
+                    
                         <li class="active">
                             <a href="./">Syntax</a>
                         </li>
                     
                         <li >
                             <a href="../semantics/">Semantics</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../Differences_with_the_standard/">About this grammar</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../metaschema/">Meta Schema</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Validator <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../validator/">Check our Validator</a>
                         </li>
                     
                     </ul>
@@ -115,7 +140,7 @@
             <!-- Search, Navigation and Repo links -->
             <ul class="nav navbar-nav navbar-right">
                 <li >
-                    <a rel="next" href="../definitions_references/">
+                    <a rel="next" href="../why/">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
@@ -178,10 +203,13 @@
 <b>defs</b> := "definitions": { <b>kSch (, kSch)</b>*}
 <b>kSch</b> := <b>kword</b>: { <b>JSch</b> }
 <b>JSch</b> := ( <b>res</b> (, <b>res</b>)*)
-<b>res</b> := <b>type</b> | <b>strRes</b> | <b>numRes</b> | <b>arrRes</b> | <b>objRes</b> | <b>multRes</b> | <b>refSch</b>
+<b>res</b> := <b>type</b> | <b>strRes</b> | <b>numRes</b> | <b>arrRes</b> | <b>objRes</b> | <b>multRes</b> | <b>refSch</b> | <b>title</b> | <b>description</b>
 <b>type</b> := "type" : ([<b>typename</b> (, <b>typename</b>)*] | <b>typename</b>)
-<b>typename</b> := "string" | "integer" | "number" | "boolean" | "null" | "array" | "object"</pre> </p>
-<p>Here each <strong>res</strong> and <strong>typename</strong> must be different from each other(otherwise they would be superfluous). We must also note that each <strong>kword</strong> is representing a keyword that must be unique in the nest level that is occurs. Finally, a <strong>uri</strong> is any possible uri as defined in the <a href="https://tools.ietf.org/html/rfc3986#section-3.1">standard</a>. Next we specify the remaining restrictions: <strong>strRes</strong>, <strong>numRes</strong>, <strong>arrRes</strong>, <strong>objRes</strong> and <strong>multRes</strong>, as well as referred schemas <strong>refSch</strong>.</p>
+<b>typename</b> := "string" | "integer" | "number" | "boolean" | "null" | "array" | "object"
+<b>title</b> := "title":  <b>string</b>
+<b>description</b> := "description":  <b>string</b>
+</pre> </p>
+<p>Here each <strong>res</strong> and <strong>typename</strong> must be different from each other(otherwise they would be superfluous). We must also note that each <strong>kword</strong> is representing a keyword that must be unique in the nest level that is occurs. Besides, <b>string</b> is any string to describe either the title or de description of the nested schema. Finally, a <strong>uri</strong> is any possible uri as defined in the <a href="https://tools.ietf.org/html/rfc3986#section-3.1">standard</a>. Next we specify the remaining restrictions: <strong>strRes</strong>, <strong>numRes</strong>, <strong>arrRes</strong>, <strong>objRes</strong> and <strong>multRes</strong>, as well as referred schemas <strong>refSch</strong>.</p>
 <h3 id="string-restrictions">String Restrictions</h3>
 <pre>
 <b>strRes</b> :=  <b>minLen</b> | <b>maxLen</b> | <b>pattern</b>
@@ -193,10 +221,10 @@
 <p>Here <strong>n</strong> is a natural number and <strong>r</strong> is a regular expression.</p>
 <h3 id="numeric-restrictions">Numeric Restrictions</h3>
 <pre>
-<b>numRes</b> := <b>min</b> | <b>exMin</b> | <b>max</b> | <b>exMax</b> | <b>multiple</b> 
-<b>min</b> := "minimum": <b>r</b> 
+<b>numRes</b> := <b>min</b> | <b>max</b> | <b>multiple</b> 
+<b>min</b> := "minimum": <b>r</b> (,<b>exMin</b>)?
 <b>exMin</b> := "exclusiveMinimum": <b>bool</b>
-<b>max</b> := "maximum": <b>r</b> 
+<b>max</b> := "maximum": <b>r</b> (,<b>exMax</b>)?
 <b>exMax</b> := "exclusiveMaximum": <b>bool</b>
 <b>multiple</b> := "multipleOf": <b>r</b>   (<b>r</b> >= 0)
 </pre>
@@ -224,9 +252,8 @@
 <b>req</b> := "required": [ <b>kword</b> (, <b>kword</b>)*]
 <b>minprop</b> := "minProperties": <b>n</b>
 <b>maxprop</b> := "maxProperties": <b>n</b>
-<b>dep</b> := "dependencies": (<b>depArr</b> | <b>depSch</b>)
-<b>depArr</b> := { <b>kArr</b> (, <b>kArr</b>)*}
-<b>depSch</b> := { <b>kSch</b> (, <b>kSch</b>)*}
+<b>dep</b> := "dependencies": { <b>kDep</b> (, <b>kDep</b>)*}
+<b>kDep</b> := (<b>kArr</b> | <b>kSch</b>)
 <b>kArr</b> := <b>kword</b>: [ <b>kword</b> (, <b>kword</b>)*]
 <b>pattprop</b> := "patternProperties": { <b>patSch</b> (, <b>patSch</b>)*}
 <b>patSch</b> := "<b>regExp</b>": { <b>JSch</b> }

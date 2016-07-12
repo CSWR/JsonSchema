@@ -99,11 +99,36 @@
                     <ul class="dropdown-menu">
                     
                         <li >
+                            <a href="../why/">Why a formal specification?</a>
+                        </li>
+                    
+                        <li >
                             <a href="../grammar/">Syntax</a>
                         </li>
                     
                         <li class="active">
                             <a href="./">Semantics</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../Differences_with_the_standard/">About this grammar</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../metaschema/">Meta Schema</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Validator <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../validator/">Check our Validator</a>
                         </li>
                     
                     </ul>
@@ -119,8 +144,8 @@
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
-                <li class="disabled">
-                    <a rel="prev" >
+                <li >
+                    <a rel="prev" href="../Differences_with_the_standard/">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -243,11 +268,14 @@
 <h2 id="validation">Validation</h2>
 <p>Let <strong>S</strong> be a JSON Schema and <strong>J</strong> a JSON document, and assume that the JSON schema document that contains <strong>S</strong> is <strong>D</strong>. We say that <strong>J</strong> validates against <strong>S</strong> if one of the following holds: </p>
 <ul>
-<li>One of the key:value pairs in <strong>S</strong> is a JSON reference <strong>R</strong>, and <strong>J</strong> validates against <strong>R</strong> under <strong>D</strong>. </li>
-<li>One of the key:value pairs in <strong>S</strong> is a JSON reference <strong>R</strong>, <strong>EVAL(D,R)</strong> returns error, and for each key:value pair <strong>k</strong> in <strong>S</strong> such that <strong>Compatible(J,k) = true</strong> we have that <strong>J</strong> validates against <strong>k</strong>. </li>
-<li><strong>S</strong> does not contain a JSON Reference, and for each key:value pair <strong>k</strong> in <strong>S</strong> such that <strong>Compatible(J,k) = true</strong> we have that <strong>J</strong> validates against <strong>k</strong> under <strong>S</strong>. </li>
+<li>
+<p>One of the key:value pairs in <strong>S</strong> is a JSON reference <strong>R</strong>, and <strong>J</strong> validates against <strong>R</strong> under <strong>D</strong>. </p>
+</li>
+<li>
+<p><strong>S</strong> does not contain a JSON Reference, and for each key:value pair <strong>k</strong> in <strong>S</strong> such that <strong>Compatible(J,k) = true</strong> we have that <strong>J</strong> validates against <strong>k</strong> under <strong>S</strong>. </p>
+</li>
 </ul>
-<p>Note how we make a special case when <strong>J</strong> is a JSON reference. In this case, but only if the reference sucessfully retrieves a schema, we ignore all the remaining keywords, and just validate against the schema retrieved by the reference. </p>
+<p>Note how we make a special case when <strong>J</strong> is a JSON reference. In this case, but only if the reference sucessfully retrieves a schema, we ignore all the remaining keywords, and just validate against the schema retrieved by the reference. On the other hand, no document validates agains a reference that returns an error (simply because in this case it is not possible to instantiate the schema)</p>
 <p>In turn, let <strong>S</strong> be a JSON schema, <strong>k</strong> be a key:value pair in <strong>S</strong> and <strong>J</strong> a JSON document. We say that <strong>J</strong> validates against <strong>k</strong> under <strong>S</strong> if one of the following holds: </p>
 <h3 id="general-restrictions">General Restrictions</h3>
 <ul>

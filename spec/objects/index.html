@@ -99,11 +99,36 @@
                     <ul class="dropdown-menu">
                     
                         <li >
+                            <a href="../why/">Why a formal specification?</a>
+                        </li>
+                    
+                        <li >
                             <a href="../grammar/">Syntax</a>
                         </li>
                     
                         <li >
                             <a href="../semantics/">Semantics</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../Differences_with_the_standard/">About this grammar</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../metaschema/">Meta Schema</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Validator <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../validator/">Check our Validator</a>
                         </li>
                     
                     </ul>
@@ -469,9 +494,8 @@
 <b>req</b> := "required": [ <b>kword</b> (, <b>kword</b>)*]
 <b>minprop</b> := "minProperties": <b>n</b>
 <b>maxprop</b> := "maxProperties": <b>n</b>
-<b>dep</b> := "dependencies": (<b>depArr</b> | <b>depSch</b>)
-<b>depArr</b> := { <b>kArr</b> (, <b>kArr</b>)*}
-<b>depSch</b> := { <b>kSch</b> (, <b>kSch</b>)*}
+<b>dep</b> := "dependencies": { <b>kDep</b> (, <b>kDep</b>)*}
+<b>kDep</b> := (<b>kArr</b> | <b>kSch</b>)
 <b>kArr</b> := <b>kword</b>: [ <b>kword</b> (, <b>kword</b>)*]
 <b>pattprop</b> := "patternProperties": { <b>patSch</b> (, <b>patSch</b>)*}
 <b>patSch</b> := "<b>regExp</b>": { <b>JSch</b> }
