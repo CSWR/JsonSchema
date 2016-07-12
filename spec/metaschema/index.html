@@ -171,9 +171,168 @@
 <h1 id="meta-schema"><CENTER>Meta - Schema</CENTER></h1>
 <p><CENTER>The schema of all JSON schemas we allow.</CENTER></p>
 <p>Since we are <a href="#differences_with_the_standard">leaving out some general schemas</a> in our specification, we present below a JSON Schema that represents all valid JSON schemas. The schema can be 
-<a href="../metashcema.json">downloaded here</a>. </p>
+<a href="https://github.com/CSWR/json_schema_validator/blob/master/validator/meta_schema.json">downloaded here</a>. </p>
 <h2 id="meta-schema_1">Meta - Schema</h2>
-<p>To be added</p></div>
+<p><strong>meta_schema.json</strong></p>
+<pre><code>{
+  "definitions":{
+    "JSDoc":{
+      "type": "object",
+      "properties":{
+        "id": {
+            "type": "string",
+            "format": "uri"
+        },
+        "$schema": {
+            "type": "string",
+            "format": "uri"
+        },
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "default": {
+
+        },
+
+        "definitions": {
+          "type": "object",
+          "additionalItems": {
+            "$ref": "#/definitions/JSDoc"
+          }
+        },
+
+        "type":{
+      "anyOf":[
+        {"$ref": "#/definitions/typename"},
+        {"type": "array",
+        "additionalItems":{
+          "$ref": "#/definitions/typename"
+        }}
+      ]
+    },
+
+        "allOf":{
+          "type":"array",
+          "items":{"$ref":"#/definitions/JSch"}
+        },
+        "anyOf":{
+          "type":"array",
+          "items":{"$ref":"#/definitions/JSch"}
+        },
+        "not":{
+          "type":"array",
+          "items":{"$ref":"#/definitions/JSch"}
+        },
+        "oneOf":{
+          "type":"array",
+          "items":{"$ref":"#/definitions/JSch"}
+        },
+        "enum":{
+          "type":"array"
+        },
+
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/JSDoc"
+            }
+          ]
+        },
+        "minProperties": {
+          "type": "integer"
+        },
+        "maxProperties": {
+          "type": "integer"
+        },
+        "patternProperties": {
+          "type": "object",
+          "additionalProperties":{
+            "$ref": "#/definitions/JSDoc"
+          }
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties":{
+            "$ref": "#/definitions/JSDoc"
+          }
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dependencies": {
+          "$ref": "#/definitions/dep"
+        },
+
+        "items":{
+          "oneOf":[
+            {"$ref":"#/definitions/JSDoc"},
+            {
+              "type":"array",
+              "items":{
+                "$ref":"#/definitions/JSDoc"
+              },
+              "minItems": 1
+            }
+          ]
+        },
+        "additionalItems":{"anyOf":[{"type":"boolean"}, {"$ref":"#/definitions/schema"}]},
+        "minItems":{"type":"integer"},
+        "maxItems":{"type":"integer"},
+        "uniqueItems":{"type":"boolean"},
+
+        "minLength":{"type":"integer"},
+        "maxLength":{"type":"integer"},
+        "pattern":{"type":"string"},
+        "format":{"enum":["date-time","email","hostname","ipv4","ipv6","uri"]},
+
+        "multipleOf": {
+          "type": "number"
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "boolean"
+        },
+        "exclusiveMaximum": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "typename":{
+      "enum": ["string", "integer", "number", "boolean", "null", "array", "object"]
+    },
+    "dep":{
+      "type": "object",
+      "additionalProperties":{
+        "anyOf":[
+          {"$ref": "#/definitions/JSDoc"},
+          {"$ref": "#/definitions/depArr"}
+        ]
+      }
+    },
+    "depArr": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$ref":"#/definitions/JSDoc"
+}}</code></pre></div>
         </div>
 
         <footer class="col-md-12">
