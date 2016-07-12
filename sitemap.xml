@@ -4,7 +4,7 @@
     
     <url>
      <loc>None/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -13,43 +13,43 @@
         
     <url>
      <loc>None/spec/introduction/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/spec/basic_types/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/spec/arrays/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/spec/objects/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/spec/generic_keywords/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/spec/multiple_types/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/spec/definitions_references/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -59,31 +59,31 @@
         
     <url>
      <loc>None/spec/why/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/spec/grammar/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/spec/semantics/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/spec/Differences_with_the_standard/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/spec/metaschema/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -93,7 +93,7 @@
         
     <url>
      <loc>None/spec/validator/</loc>
-     <lastmod>2016-07-11</lastmod>
+     <lastmod>2016-07-12</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
