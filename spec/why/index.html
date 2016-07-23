@@ -163,8 +163,6 @@
         
             <li><a href="#what-happens-when-there-is-no-formal-grammar">What happens when there is no formal grammar?</a></li>
         
-            <li><a href="#academic-work">Academic work</a></li>
-        
     
     </ul>
 </div></div>
@@ -233,14 +231,14 @@
 <p>The document is simply the string <code>"hola"</code>.</p>
 <h4 id="the-validators-used">The validators used</h4>
 <p>The validators were downloaded from their respective github repositories, or dedicated Web pages. For those also having an online version we list the corresponding links.</p>
-<p>V1: <a href="https://github.com/ruby-json-schema/json-schema">Ruby JSON Schema Validator</a></p>
-<p>V2: <a href="https://pypi.python.org/pypi/jsonschema">JSON Schema for Python</a></p>
+<p>V1: <a href="https://pypi.python.org/pypi/jsonschema">JSON Schema for Python</a></p>
+<p>V2: <a href="https://github.com/mafintosh/is-my-json-valid">A  JavaScript validator for JSON Schema</a></p>
 <p>V3: <a href="https://github.com/daveclayton/json-schema-validator">JSON Schema validator in Java</a> (also available <a href="http://json-schema-validator.herokuapp.com/">online</a>)</p>
-<p>V4: <a href="https://github.com/mafintosh/is-my-json-valid">A  JavaScript validator for JSON Schema</a></p>
-<p>V5: <a href="https://pypi.python.org/pypi/json-schema-validator/2.3">An old version of the Python validator</a></p>
+<p>V4: <a href="https://github.com/ruby-json-schema/json-schema">Ruby JSON Schema Validator</a></p>
+<p>V5: <a href="https://pypi.python.org/pypi/json-schema-validator/2.3">Another Python validator</a></p>
 <p>We would like to remark that all of these validators claim to pass the <a href="https://github.com/json-schema-org/JSON-Schema-Test-Suite">JSON Schema test suite</a>.</p>
 <h4 id="results-and-discussion">Results and discussion</h4>
-<p>The results are summarised in the table below. Here Y stands for accepting the document corresponding to the test, N that the document does not validate, and '--' that the validator does not support this type of schema.</p>
+<p>The results that we ran in <strong>September 2015</strong> are summarised in the table below (<em>please keep on reading for the changes in new versions of the validators</em>). Here Y stands for accepting the document corresponding to the test, N that the document does not validate, and '--' that the validator does not support this type of schema.</p>
 <p><center></p>
 <table>
 <thead>
@@ -295,9 +293,58 @@
 <p>As far as T3 is concerned, it seems that most validators do enforce the type of the JSON document correctly, although even here there are some exceptions.</p>
 <p>Finally, using cyclic references, although permitted by the <a href="http://json-schema.org/documentation.html">JSON Schema draft</a>, is not supported by most validators, and in the one case that it was supported, the returned result was not correct. On the other hand, it is also debatable how such a property should be implemented, since it could lead to potentially infinite validation sequences.</p>
 <p>Therefore, the lack of a strict formalisation leaves us with different implementations which can disagree in certain cases. This could potentially result in certain problems, for instance in a scenario where the developers who use different validators wish to exchange their JSON documents and except them to satisfy a certain agreed-upon schema, since the results they get might be different. In order to avoid such scenarios in the rest of this section we provide a formal grammar for JSON Schema and define its semantics in an unambiguous way. In particular, we make sure that JSON files are interpreted correctly (T1), that references and types are enforced as intended (T2 and T3), and that cyclic references which can lead to infinite validation (T4) are not permitted.</p>
-<h3 id="academic-work">Academic work</h3>
-<p>The main focus of this project is to serve as a basis for a future standardization of JSON Schema. The main results of our work are exposed in <a href="http://www2016.net/proceedings/proceedings/p263.pdf">Foundations of JSON Schema</a>, our work published in the proceedings of <a href="http://www2016.net">the 25th International World Wide Web Conference (WWW 2016)</a>.</p>
-<p>In the paper, you can find the main desisions and problems we took in account in order to construct the specification. Moreover, we conducted both a theoretical and practical analysis of JSON Schema, providing tight complexity bounds and showing how to implement JSON Schema in a practical scenario.</p></div>
+<p>All of these recommendations are implemented in the formal specification we present and are also available in our WWW 2016 paper <a href="http://www2016.net/proceedings/proceedings/p263.pdf">Foundations of JSON Schema</a>.</p>
+<p>What is interesting is that between the time we ran the tests (September 2015) and the day our paper was published the validators we used were updated, so we re ran the tests again in <strong>July 2016</strong>. The updated results are given below:</p>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>V1</th>
+<th>V2</th>
+<th>V3</th>
+<th>V4</th>
+<th>V5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+<td>N</td>
+</tr>
+<tr>
+<td>T4</td>
+<td>--</td>
+<td>--</td>
+<td>N</td>
+<td>--</td>
+<td>--</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<p>As we can see, the problems with T1 are now completely resolved and all the validators interpret JSON documents correctly, and the same holds for T3, as the new versions now enforce the type of a document as intended. Unfortunately, T2 still suffers from the same issues, since the specification is not precise in that respect, and there were no changes with respect to T4.</p>
+<p>Intrestingly enough, the changes that were implemented are in accordance with the formal specification we (independently) proposed, thus showing how the theoretical ideas we present go hand in hand with the solutions JSON developers came up with in practice.</p></div>
         </div>
 
         <footer class="col-md-12">
