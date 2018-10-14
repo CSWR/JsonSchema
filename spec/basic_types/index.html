@@ -253,7 +253,7 @@ or <code>integer</code> types.</p>
    "maximum": 150
  }</code></pre></p>
 <p>This document validates against any number between <code>0</code> and <code>150</code>.
-By default the ranges are inclusive: <code>"minimum": n</code> imposes the restriction that numbers need to be <em>greater than or equal to</em> <code>n</code>, and <code>"minimum": m</code> imposes that numbers need to be <em>less than or equal to</em> <code>m</code>. This means that both <code>0</code> and <code>150</code> satisfy the schema above. We can switch the ranges to be exclusive by using the <code>"exclusiveMinimum"</code> and <code>"exclusiveMaximum"</code> keywords. </p>
+By default the ranges are inclusive: <code>"minimum": n</code> imposes the restriction that numbers need to be <em>greater than or equal to</em> <code>n</code>, and <code>"maximum": m</code> imposes that numbers need to be <em>less than or equal to</em> <code>m</code>. This means that both <code>0</code> and <code>150</code> satisfy the schema above. We can switch the ranges to be exclusive by using the <code>"exclusiveMinimum"</code> and <code>"exclusiveMaximum"</code> keywords. </p>
 <p>For example, the following schema validates against <code>0</code>, but not against <code>150</code>:</p>
 <p><pre><code> {
    "type":"integer", 
